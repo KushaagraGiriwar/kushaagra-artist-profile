@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kushaagra Giriwar — Bollywood & Semi-Classical Vocalist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14161b;
+    --ink-2:#1c1f26;
+    --ivory:#f2efe9;
+    --ivory-dim:#c9c6bd;
+    --brass:#c9a227;
+    --wine:#7a2331;
+    --line: rgba(242,239,233,0.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--ivory);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+
+  /* ---------- Editable notice ---------- */
+  .edit-hint{
+    background:var(--brass);
+    color:var(--ink);
+    font-size:0.72rem;
+    padding:2px 8px;
+    border-radius:3px;
+    font-weight:600;
+    display:inline-block;
+    margin-bottom:8px;
+    font-family:'Inter',sans-serif;
+    letter-spacing:0.02em;
+  }
+
+  /* ---------- Nav ---------- */
+  nav{
+    position:fixed;
+    top:0;left:0;right:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:22px 6%;
+    z-index:100;
+    background:linear-gradient(to bottom, rgba(20,22,27,0.95), rgba(20,22,27,0));
+    backdrop-filter:blur(2px);
+  }
+  .logo{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;}
+  .nav-links{display:flex;gap:34px;font-size:0.92rem;}
+  .nav-links a{opacity:0.85;transition:opacity .2s;position:relative;}
+  .nav-links a:hover{opacity:1;}
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;
+    background:var(--brass);transition:width .25s;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-toggle{display:none;background:none;border:none;color:var(--ivory);font-size:1.5rem;cursor:pointer;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    padding:0 6% 90px;
+    position:relative;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 20%, rgba(122,35,49,0.35), transparent 70%),
+      radial-gradient(ellipse 50% 40% at 10% 90%, rgba(201,162,39,0.12), transparent 70%),
+      var(--ink);
+  }
+  .hero-inner{max-width:900px;}
+  .hero-kicker{
+    font-size:0.95rem;
+    color:var(--brass);
+    margin-bottom:18px;
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-weight:500;
+  }
+  .hero h1{
+    font-size:clamp(3.2rem, 9vw, 7rem);
+    line-height:0.98;
+    margin-bottom:22px;
+  }
+  .hero p.tag{
+    font-size:1.15rem;
+    color:var(--ivory-dim);
+    max-width:520px;
+    margin-bottom:36px;
+  }
+  .hero-actions{display:flex;gap:16px;flex-wrap:wrap;}
+  .btn{
+    padding:14px 28px;
+    border-radius:2px;
+    font-size:0.95rem;
+    font-weight:600;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:transform .2s, background .2s;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .btn-primary{background:var(--brass);color:var(--ink);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-ghost{border:1px solid var(--line);color:var(--ivory);}
+  .btn-ghost:hover{border-color:var(--ivory);}
+
+  .scroll-cue{
+    position:absolute;bottom:36px;left:6%;
+    font-size:0.78rem;color:var(--ivory-dim);
+    display:flex;align-items:center;gap:10px;
+  }
+  .scroll-cue .line{width:1px;height:36px;background:var(--line);position:relative;overflow:hidden;}
+  .scroll-cue .line::after{
+    content:"";position:absolute;top:0;left:0;width:100%;height:40%;
+    background:var(--brass);animation:slide 2.2s ease-in-out infinite;
+  }
+  @keyframes slide{0%{top:-40%}100%{top:100%}}
+
+  /* ---------- Section shell ---------- */
+  section{padding:110px 6%;}
+  .section-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    margin-bottom:56px;flex-wrap:wrap;gap:16px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:22px;
+  }
+  .section-head h2{font-size:clamp(2rem,4vw,3rem);}
+  .section-head .count{color:var(--ivory-dim);font-size:0.9rem;}
+
+  /* ---------- About ---------- */
+  .about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:70px;align-items:start;}
+  .about-grid p{font-size:1.08rem;color:var(--ivory-dim);margin-bottom:20px;max-width:560px;}
+  .facts{border-top:1px solid var(--line);}
+  .fact{
+    display:flex;justify-content:space-between;
+    padding:18px 0;border-bottom:1px solid var(--line);
+    font-size:0.95rem;
+  }
+  .fact span:first-child{color:var(--ivory-dim);}
+
+  /* ---------- Videos ---------- */
+  .tabs{display:flex;gap:8px;margin-bottom:44px;flex-wrap:wrap;}
+  .tab{
+    padding:10px 22px;border:1px solid var(--line);border-radius:30px;
+    font-size:0.9rem;cursor:pointer;background:transparent;color:var(--ivory-dim);
+    transition:all .2s;
+  }
+  .tab.active{background:var(--ivory);color:var(--ink);border-color:var(--ivory);}
+  .video-grid{
+    display:grid;grid-template-columns:repeat(auto-fill, minmax(300px,1fr));
+    gap:28px;
+  }
+  .video-panel{display:none;}
+  .video-panel.active{display:grid;grid-template-columns:repeat(auto-fill, minmax(300px,1fr));gap:28px;}
+  .video-card{
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    overflow:hidden;
+  }
+  .video-thumb{
+    aspect-ratio:16/9;
+    background:linear-gradient(135deg,#23262f,#181a20);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+    color:var(--ivory-dim);
+    font-size:0.85rem;
+    text-align:center;
+    padding:16px;
+  }
+  .play-btn{
+    width:52px;height:52px;border-radius:50%;
+    border:1.5px solid var(--ivory);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:10px;
+    transition:background .2s;
+  }
+  .video-card:hover .play-btn{background:var(--brass);border-color:var(--brass);}
+  .video-info{padding:18px 20px;}
+  .video-info h3{font-size:1.05rem;margin-bottom:6px;font-weight:600;}
+  .video-info p{font-size:0.85rem;color:var(--ivory-dim);}
+
+  /* ---------- Gallery ---------- */
+  .gallery{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    grid-auto-rows:190px;
+    gap:14px;
+  }
+  .gallery .g-item{
+    background:linear-gradient(160deg,#23262f,#15171c);
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ivory-dim);font-size:0.8rem;text-align:center;padding:10px;
+  }
+  .gallery .g-item:nth-child(1){grid-column:span 2;grid-row:span 2;}
+  .gallery .g-item:nth-child(4){grid-row:span 2;}
+  .gallery .g-item:nth-child(6){grid-column:span 2;}
+
+  /* ---------- Fees ---------- */
+  .fee-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .fee-card{
+    border:1px solid var(--line);
+    padding:36px 30px;
+    position:relative;
+    transition:border-color .2s;
+  }
+  .fee-card.featured{border-color:var(--brass);}
+  .fee-card .tag2{
+    position:absolute;top:-1px;right:-1px;
+    background:var(--brass);color:var(--ink);
+    font-size:0.7rem;font-weight:700;padding:5px 12px;
+  }
+  .fee-card h3{font-size:1.3rem;margin-bottom:6px;}
+  .fee-card .price{
+    font-family:'Fraunces',serif;font-size:2.4rem;color:var(--brass);
+    margin:18px 0 6px;
+  }
+  .fee-card .price small{font-size:1rem;color:var(--ivory-dim);font-family:'Inter',sans-serif;}
+  .fee-card ul{list-style:none;margin-top:22px;font-size:0.9rem;color:var(--ivory-dim);}
+  .fee-card li{padding:8px 0;border-bottom:1px solid var(--line);}
+  .fee-note{margin-top:26px;font-size:0.88rem;color:var(--ivory-dim);}
+
+  /* ---------- Testimonials ---------- */
+  .testimonial-row{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;}
+  .testimonial{border-top:2px solid var(--brass);padding-top:20px;}
+  .testimonial p.quote{font-family:'Fraunces',serif;font-size:1.1rem;font-style:italic;margin-bottom:16px;color:var(--ivory);}
+  .testimonial p.who{font-size:0.85rem;color:var(--ivory-dim);}
+
+  /* ---------- Contact ---------- */
+  .contact-wrap{
+    display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start;
+  }
+  .contact-wrap h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:22px;}
+  .big-email{
+    font-family:'Fraunces',serif;font-size:clamp(1.6rem,3.2vw,2.3rem);
+    color:var(--brass);word-break:break-word;
+    display:inline-block;margin-bottom:26px;border-bottom:1px solid var(--brass);
+    padding-bottom:4px;
+  }
+  .contact-details{font-size:0.95rem;color:var(--ivory-dim);}
+  .contact-details div{margin-bottom:10px;}
+  .socials{display:flex;gap:18px;margin-top:26px;}
+  .socials a{
+    width:40px;height:40px;border:1px solid var(--line);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:0.85rem;
+    transition:border-color .2s;
+  }
+  .socials a:hover{border-color:var(--brass);color:var(--brass);}
+
+  .cform input, .cform select, .cform textarea{
+    width:100%;background:var(--ink-2);border:1px solid var(--line);
+    color:var(--ivory);padding:13px 14px;font-family:'Inter',sans-serif;
+    font-size:0.92rem;margin-bottom:14px;border-radius:2px;
+  }
+  .cform label{font-size:0.8rem;color:var(--ivory-dim);display:block;margin-bottom:6px;}
+  .cform textarea{resize:vertical;min-height:90px;}
+
+  footer{
+    padding:40px 6%;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:0.82rem;color:var(--ivory-dim);flex-wrap:wrap;gap:10px;
+  }
+
+  @media(max-width:860px){
+    .nav-links{display:none;}
+    .about-grid,.contact-wrap{grid-template-columns:1fr;gap:40px;}
+    .fee-grid,.testimonial-row{grid-template-columns:1fr;}
+    .gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:140px;}
+    .gallery .g-item:nth-child(1){grid-column:span 2;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Kushaagra Giriwar</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#videos">Videos</a>
+    <a href="#gallery">Photos</a>
+    <a href="#fees">Booking</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-kicker">Bollywood &amp; Semi-Classical Vocalist</div>
+    <h1>Kushaagra<br>Giriwar</h1>
+    <p class="tag">Solo sets, intimate duo shows, or a full live band — Bollywood and semi-classical music built for weddings, college fests, corporate events and private nights that need to be remembered.</p>
+    <div class="hero-actions">
+      <a href="#videos" class="btn btn-primary">Watch performances</a>
+      <a href="#fees" class="btn btn-ghost">Check availability &amp; fees</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><div class="line"></div>scroll</div>
+</header>
+
+<!-- ================= ABOUT ================= -->
+<section id="about">
+  <div class="section-head">
+    <h2>About</h2>
+  </div>
+  <div class="about-grid">
+    <div>
+      <span class="edit-hint">EDIT: full bio coming soon — placeholder below</span>
+      <p>Kushaagra Giriwar is a Bollywood and semi-classical vocalist based in the Delhi NCR region, performing solo, duo and full-band sets across weddings, college fests and private events. Notable performances include Pianoman (TPM) and multiple college fest stages.</p>
+      <p>[Full bio to be added — journey, influences, and what makes your live sets stand out.]</p>
+    </div>
+    <div class="facts">
+      <div class="fact"><span>Genre</span><span>Bollywood, Semi-classical</span></div>
+      <div class="fact"><span>Based in</span><span>New Delhi / Noida / Gurgaon</span></div>
+      <div class="fact"><span>Performing since</span><span>4 years</span></div>
+      <div class="fact"><span>Formats</span><span>Solo / Duo / Band</span></div>
+      <div class="fact"><span>Languages</span><span>Hindi, English</span></div>
+      <div class="fact"><span>Notable stages</span><span>Pianoman (TPM), college fests</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= VIDEOS ================= -->
+<section id="videos">
+  <div class="section-head">
+    <h2>Performances</h2>
+    <span class="edit-hint">Waiting for video files</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="solo">Solo</button>
+    <button class="tab" data-tab="duo">Duo</button>
+    <button class="tab" data-tab="band">Band</button>
+  </div>
+
+  <div class="video-panel active" id="solo">
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>ThePianoMan (TPM)</h3><p>Safdarjang</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Saiyaara</h3><p>@ DTU</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Dancing Numbers</h3><p>@ Breath</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Khamoshiyan</h3><p>@ Social, Civil Lines</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Kaise Hua</h3><p>@ CVS</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Retro Mashup</h3><p>@ FLOS</p></div>
+    </div>
+  </div>
+
+  <div class="video-panel" id="duo">
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Ye Tune Kya Kiya</h3><p>@ Rajdhani College</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>O O Jaane Jaana</h3><p>@ Social</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Pehli Nazar Mein</h3><p>@ Miranda House</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Chura Liya Hai Tumne Jo Dil Ko</h3><p>@ Miranda House</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Ajeeb Dastan</h3><p>@ Mazi Cafe</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Sahiba</h3><p>Duo performance</p></div>
+    </div>
+  </div>
+
+  <div class="video-panel" id="band">
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Khuda Jaane</h3><p>Full band, live</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Zara Sa</h3><p>Full band, live</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Ae Dil Hai Mushkil</h3><p>Full band, live</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Yeh Fitoor Mera</h3><p>Full band, live</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Jo Bheji Thi Dua</h3><p>Full band, live</p></div>
+    </div>
+    <div class="video-card">
+      <div class="video-thumb"><div class="play-btn">▶</div>Video coming soon</div>
+      <div class="video-info"><h3>Ud-da Punjab</h3><p>Full band, live</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GALLERY ================= -->
+<section id="gallery">
+  <div class="section-head">
+    <h2>Photos</h2>
+    <span class="edit-hint">Waiting for photo files</span>
+  </div>
+  <div class="gallery">
+    <div class="g-item">Photo coming soon</div>
+    <div class="g-item">Photo coming soon</div>
+    <div class="g-item">Photo coming soon</div>
+    <div class="g-item">Photo coming soon</div>
+    <div class="g-item">Photo coming soon</div>
+    <div class="g-item">Photo coming soon</div>
+    <div class="g-item">Photo coming soon</div>
+  </div>
+</section>
+
+<!-- ================= FEES ================= -->
+<section id="fees">
+  <div class="section-head">
+    <h2>Booking &amp; fees</h2>
+    <span class="edit-hint">EDIT: set your real prices</span>
+  </div>
+  <div class="fee-grid">
+    <div class="fee-card">
+      <h3>Solo</h3>
+      <div class="price">₹XX,XXX <small>/ event</small></div>
+      <p style="color:var(--ivory-dim);font-size:0.9rem;">Acoustic or backing-track set, ideal for intimate venues and smaller events.</p>
+      <ul>
+        <li>Up to 2 hours performance</li>
+        <li>Own PA for small venues</li>
+        <li>Custom setlist / requests</li>
+      </ul>
+    </div>
+    <div class="fee-card featured">
+      <span class="tag2">Most booked</span>
+      <h3>Duo</h3>
+      <div class="price">₹XX,XXX <small>/ event</small></div>
+      <p style="color:var(--ivory-dim);font-size:0.9rem;">Fuller sound with a second musician — most popular for weddings and private parties.</p>
+      <ul>
+        <li>Up to 2.5 hours performance</li>
+        <li>Sound setup included</li>
+        <li>Custom setlist / requests</li>
+      </ul>
+    </div>
+    <div class="fee-card">
+      <h3>Band</h3>
+      <div class="price">₹XX,XXX <small>/ event</small></div>
+      <p style="color:var(--ivory-dim);font-size:0.9rem;">Full live band experience for festivals, large weddings and corporate stages.</p>
+      <ul>
+        <li>Full band (list size, e.g. 4–5 members)</li>
+        <li>Sound engineer available on request</li>
+        <li>Custom setlist / requests</li>
+      </ul>
+    </div>
+  </div>
+  <p class="fee-note">Fees vary by location, event duration and travel. Get in touch for a custom quote — outstation and international bookings welcome.</p>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section id="testimonials">
+  <div class="section-head">
+    <h2>What people say</h2>
+    <span class="edit-hint">EDIT: add real quotes once you have them</span>
+  </div>
+  <div class="testimonial-row">
+    <div class="testimonial">
+      <p class="quote">"Add a short quote from a client or venue here."</p>
+      <p class="who">— Name, Event / Venue</p>
+    </div>
+    <div class="testimonial">
+      <p class="quote">"Add another testimonial here."</p>
+      <p class="who">— Name, Event / Venue</p>
+    </div>
+    <div class="testimonial">
+      <p class="quote">"And a third one, if you have it."</p>
+      <p class="who">— Name, Event / Venue</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div>
+      <h2>Let's work together</h2>
+      <span class="edit-hint">EDIT: set your real email / phone / socials</span>
+      <a href="mailto:you@example.com" class="big-email">you@example.com</a>
+      <div class="contact-details">
+        <div>Phone / WhatsApp: +91 XXXXX XXXXX</div>
+        <div>Based in: City, Country</div>
+        <div>Available for: Weddings · Festivals · Corporate · Private events</div>
+      </div>
+      <div class="socials">
+        <a href="#" title="Instagram">IG</a>
+        <a href="#" title="YouTube">YT</a>
+        <a href="#" title="Spotify">SP</a>
+        <a href="#" title="Facebook">FB</a>
+      </div>
+    </div>
+    <form class="cform" onsubmit="return false;">
+      <label>Name</label>
+      <input type="text" placeholder="Your name">
+      <label>Email</label>
+      <input type="email" placeholder="you@example.com">
+      <label>Event date</label>
+      <input type="date">
+      <label>Format needed</label>
+      <select>
+        <option>Solo</option>
+        <option>Duo</option>
+        <option>Band</option>
+        <option>Not sure yet</option>
+      </select>
+      <label>Tell me about your event</label>
+      <textarea placeholder="Venue, city, expected guests, budget..."></textarea>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Send inquiry</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div>© <span id="year"></span> Kushaagra Giriwar. All rights reserved.</div>
+  <div>Built with care — replace all EDIT-tagged placeholders before publishing.</div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.video-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
