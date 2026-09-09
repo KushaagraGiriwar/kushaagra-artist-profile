@@ -209,6 +209,45 @@
   .gallery .g-item:nth-child(1){grid-column:span 2;grid-row:span 2;}
   .gallery .g-item:nth-child(4){grid-row:span 2;}
   .gallery .g-item:nth-child(6){grid-column:span 2;}
+  .gallery .g-item{cursor:pointer;}
+  .gallery .g-item img{transition:transform .3s;}
+  .gallery .g-item:hover img{transform:scale(1.04);}
+
+  /* ---------- Lightbox ---------- */
+  .lightbox{
+    position:fixed;inset:0;background:rgba(10,11,14,0.96);
+    display:none;align-items:center;justify-content:center;
+    z-index:1000;padding:40px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{
+    max-width:min(1100px, 90vw);max-height:85vh;
+    object-fit:contain;border:1px solid var(--line);
+  }
+  .lightbox-close{
+    position:absolute;top:26px;right:34px;
+    font-size:1.8rem;color:var(--ivory);cursor:pointer;
+    background:none;border:none;line-height:1;
+  }
+  .lightbox-arrow{
+    position:absolute;top:50%;transform:translateY(-50%);
+    background:rgba(242,239,233,0.08);border:1px solid var(--line);
+    color:var(--ivory);width:52px;height:52px;border-radius:50%;
+    font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:background .2s;
+  }
+  .lightbox-arrow:hover{background:var(--brass);color:var(--ink);border-color:var(--brass);}
+  .lightbox-prev{left:24px;}
+  .lightbox-next{right:24px;}
+  .lightbox-count{
+    position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
+    color:var(--ivory-dim);font-size:0.85rem;
+  }
+  @media(max-width:700px){
+    .lightbox-arrow{width:42px;height:42px;font-size:1.1rem;}
+    .lightbox-prev{left:8px;}
+    .lightbox-next{right:8px;}
+  }
 
   /* ---------- Fees ---------- */
   .fee-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
@@ -435,15 +474,24 @@
     <span class="edit-hint">Live from your Drive folder</span>
   </div>
   <div class="gallery">
-    <div class="g-item"><img src="https://drive.google.com/thumbnail?id=1PesN_J9r6QSmVPsRLNOTVknUgXMzQEGN&sz=w1000" alt="Kushaagra performing" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
-    <div class="g-item"><img src="https://drive.google.com/thumbnail?id=1x2lRjmr5zEWrB0Xwe89JK7vyh1HUuuHC&sz=w1000" alt="Kushaagra performing" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
-    <div class="g-item"><img src="https://drive.google.com/thumbnail?id=1MSq3M9N0Fcge7SqtMRBdr06kCy5EjCXJ&sz=w1000" alt="Kushaagra performing" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
-    <div class="g-item"><img src="https://drive.google.com/thumbnail?id=1WDfmvZTXP2ln3um7jnCobMuqsbOxb0u2&sz=w1000" alt="Duo performance" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
-    <div class="g-item"><img src="https://drive.google.com/thumbnail?id=19d7qjBMii7j6ljnACDoUB5LP6V4VGcKI&sz=w1000" alt="Duo performance" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
-    <div class="g-item"><img src="https://drive.google.com/thumbnail?id=1CCU5eVN57EJFeSMK6qmCuqHQGtZmM1si&sz=w1000" alt="Band performance at IIT Delhi" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
-    <div class="g-item"><img src="https://drive.google.com/thumbnail?id=1B-VqcZVGXBYHpGpNzj9v8LNe3f4ncG2_&sz=w1000" alt="Band performance" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>
+    <div class="g-item"><img src="https://drive.google.com/thumbnail?id=1PesN_J9r6QSmVPsRLNOTVknUgXMzQEGN&sz=w1000" alt="Kushaagra performing" loading="lazy" data-idx="0" style="width:100%;height:100%;object-fit:cover;"></div>
+    <div class="g-item"><img src="https://drive.google.com/thumbnail?id=1x2lRjmr5zEWrB0Xwe89JK7vyh1HUuuHC&sz=w1000" alt="Kushaagra performing" loading="lazy" data-idx="1" style="width:100%;height:100%;object-fit:cover;"></div>
+    <div class="g-item"><img src="https://drive.google.com/thumbnail?id=1MSq3M9N0Fcge7SqtMRBdr06kCy5EjCXJ&sz=w1000" alt="Kushaagra performing" loading="lazy" data-idx="2" style="width:100%;height:100%;object-fit:cover;"></div>
+    <div class="g-item"><img src="https://drive.google.com/thumbnail?id=1WDfmvZTXP2ln3um7jnCobMuqsbOxb0u2&sz=w1000" alt="Duo performance" loading="lazy" data-idx="3" style="width:100%;height:100%;object-fit:cover;"></div>
+    <div class="g-item"><img src="https://drive.google.com/thumbnail?id=19d7qjBMii7j6ljnACDoUB5LP6V4VGcKI&sz=w1000" alt="Duo performance" loading="lazy" data-idx="4" style="width:100%;height:100%;object-fit:cover;"></div>
+    <div class="g-item"><img src="https://drive.google.com/thumbnail?id=1CCU5eVN57EJFeSMK6qmCuqHQGtZmM1si&sz=w1000" alt="Band performance at IIT Delhi" loading="lazy" data-idx="5" style="width:100%;height:100%;object-fit:cover;"></div>
+    <div class="g-item"><img src="https://drive.google.com/thumbnail?id=1B-VqcZVGXBYHpGpNzj9v8LNe3f4ncG2_&sz=w1000" alt="Band performance" loading="lazy" data-idx="6" style="width:100%;height:100%;object-fit:cover;"></div>
   </div>
 </section>
+
+<!-- ================= LIGHTBOX ================= -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lbClose">&times;</button>
+  <button class="lightbox-arrow lightbox-prev" id="lbPrev">&#8249;</button>
+  <img id="lbImg" src="" alt="">
+  <button class="lightbox-arrow lightbox-next" id="lbNext">&#8250;</button>
+  <div class="lightbox-count" id="lbCount"></div>
+</div>
 
 <!-- ================= FEES ================= -->
 <section id="fees">
@@ -566,6 +614,52 @@
       tab.classList.add('active');
       document.getElementById(tab.dataset.tab).classList.add('active');
     });
+  });
+
+  // ---------- Lightbox ----------
+  const galleryImgs = Array.from(document.querySelectorAll('.gallery .g-item img'));
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbCount = document.getElementById('lbCount');
+  let currentIdx = 0;
+
+  function openLightbox(idx){
+    currentIdx = idx;
+    updateLightbox();
+    lightbox.classList.add('open');
+  }
+  function updateLightbox(){
+    const img = galleryImgs[currentIdx];
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    lbCount.textContent = (currentIdx + 1) + ' / ' + galleryImgs.length;
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+  }
+  function showNext(){
+    currentIdx = (currentIdx + 1) % galleryImgs.length;
+    updateLightbox();
+  }
+  function showPrev(){
+    currentIdx = (currentIdx - 1 + galleryImgs.length) % galleryImgs.length;
+    updateLightbox();
+  }
+
+  galleryImgs.forEach((img, idx) => {
+    img.addEventListener('click', () => openLightbox(idx));
+  });
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  document.getElementById('lbNext').addEventListener('click', showNext);
+  document.getElementById('lbPrev').addEventListener('click', showPrev);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'ArrowRight') showNext();
+    if (e.key === 'ArrowLeft') showPrev();
+    if (e.key === 'Escape') closeLightbox();
   });
 </script>
 
