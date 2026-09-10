@@ -307,25 +307,32 @@
   .testimonial p.quote{font-family:'Fraunces',serif;font-size:1.1rem;font-style:italic;margin-bottom:16px;color:var(--ivory);}
   .testimonial p.who{font-size:0.85rem;color:var(--ivory-dim);}
 
-  /* ---------- Comments ---------- */
-  .comments-wrap{max-width:720px;}
+  /* ---------- Comments (styled as testimonial quote cards) ---------- */
+  .comments-wrap{max-width:1100px;}
   .comment-form-note{font-size:0.85rem;color:var(--ivory-dim);margin-bottom:22px;}
+  #commentForm{max-width:720px;}
   #commentForm .cform-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
   #commentForm textarea{resize:vertical;min-height:90px;}
   #commentSubmitBtn{width:auto;padding:14px 32px;}
   #commentFormStatus{font-size:0.88rem;margin-top:10px;min-height:1.2em;}
   #commentFormStatus.success{color:var(--brass);}
   #commentFormStatus.error{color:var(--wine);}
-  .comment-list{margin-top:50px;border-top:1px solid var(--line);}
-  .comment-list-scroll{max-height:400px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--brass) transparent;}
+  .comment-list{margin-top:50px;border-top:1px solid var(--line);padding-top:44px;}
+  .comment-list-scroll{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:30px;
+    max-height:420px;overflow-y:auto;overflow-x:hidden;
+    scrollbar-width:thin;scrollbar-color:var(--brass) transparent;
+    padding-bottom:6px;
+  }
   .comment-list-scroll::-webkit-scrollbar{width:6px;}
   .comment-list-scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;}
   .comment-list-scroll.expanded{max-height:none;overflow-y:visible;}
-  .comment-item{padding:22px 0;border-bottom:1px solid var(--line);}
-  .comment-item .comment-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;flex-wrap:wrap;gap:6px;}
-  .comment-item .comment-name{font-family:'Fraunces',serif;font-weight:600;color:var(--ivory);font-size:1.02rem;}
-  .comment-item .comment-date{font-size:0.78rem;color:var(--ivory-dim);}
-  .comment-item .comment-message{color:var(--ivory-dim);font-size:0.95rem;line-height:1.6;}
+  .comment-item{border-top:2px solid var(--brass);padding-top:20px;}
+  .comment-item .comment-message{font-family:'Fraunces',serif;font-size:1.1rem;font-style:italic;margin-bottom:16px;color:var(--ivory);line-height:1.5;}
+  .comment-item .comment-head{display:flex;flex-direction:column;gap:2px;}
+  .comment-item .comment-name{font-size:0.85rem;color:var(--ivory-dim);}
+  .comment-item .comment-name::before{content:"— ";}
+  .comment-item .comment-date{font-size:0.78rem;color:var(--ivory-dim);opacity:0.7;}
   .comment-view-all{
     display:block;margin:18px auto 0;background:transparent;border:1px solid var(--line);
     color:var(--ivory-dim);padding:10px 26px;border-radius:30px;font-size:0.85rem;
@@ -376,7 +383,7 @@
   @media(max-width:860px){
     .nav-links{display:none;}
     .about-grid,.contact-wrap{grid-template-columns:1fr;gap:40px;}
-    .fee-grid,.testimonial-row{grid-template-columns:1fr;}
+    .fee-grid,.testimonial-row,.comment-list-scroll{grid-template-columns:1fr;}
     .gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:140px;}
     .gallery .g-item:nth-child(1){grid-column:span 2;}
   }
@@ -878,11 +885,11 @@
       }
       listEl.innerHTML = comments.map(c => `
         <div class="comment-item">
+          <div class="comment-message">"${escapeHtml(c.message)}"</div>
           <div class="comment-head">
             <span class="comment-name">${escapeHtml(c.name)}</span>
             <span class="comment-date">${formatDate(c.created_at)}</span>
           </div>
-          <div class="comment-message">${escapeHtml(c.message)}</div>
         </div>
       `).join('');
       // Show the "view all" button only if there are enough comments to
