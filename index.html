@@ -307,6 +307,27 @@
   .testimonial p.quote{font-family:'Fraunces',serif;font-size:1.1rem;font-style:italic;margin-bottom:16px;color:var(--ivory);}
   .testimonial p.who{font-size:0.85rem;color:var(--ivory-dim);}
 
+  /* ---------- Comments ---------- */
+  .comments-wrap{max-width:720px;}
+  .comment-form-note{font-size:0.85rem;color:var(--ivory-dim);margin-bottom:22px;}
+  #commentForm .cform-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  #commentForm textarea{resize:vertical;min-height:90px;}
+  #commentSubmitBtn{width:auto;padding:14px 32px;}
+  #commentFormStatus{font-size:0.88rem;margin-top:10px;min-height:1.2em;}
+  #commentFormStatus.success{color:var(--brass);}
+  #commentFormStatus.error{color:var(--wine);}
+  .comment-list{margin-top:50px;border-top:1px solid var(--line);}
+  .comment-item{padding:22px 0;border-bottom:1px solid var(--line);}
+  .comment-item .comment-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;flex-wrap:wrap;gap:6px;}
+  .comment-item .comment-name{font-family:'Fraunces',serif;font-weight:600;color:var(--ivory);font-size:1.02rem;}
+  .comment-item .comment-date{font-size:0.78rem;color:var(--ivory-dim);}
+  .comment-item .comment-message{color:var(--ivory-dim);font-size:0.95rem;line-height:1.6;}
+  .comment-empty, .comment-loading{color:var(--ivory-dim);font-size:0.92rem;padding:20px 0;}
+  .hp-field{position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;}
+  @media(max-width:700px){
+    #commentForm .cform-row{grid-template-columns:1fr;}
+  }
+
   /* ---------- Contact ---------- */
   .contact-wrap{
     display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start;
@@ -360,6 +381,7 @@
     <a href="#videos">Videos</a>
     <a href="#gallery">Photos</a>
     <a href="#fees">Booking</a>
+    <a href="#comments">Comments</a>
     <a href="#contact">Contact</a>
   </div>
 </nav>
@@ -602,6 +624,44 @@
   </div>
 </section>
 
+<!-- ================= COMMENTS ================= -->
+<section id="comments">
+  <div class="section-head">
+    <h2>Comments</h2>
+    <span class="edit-hint">Reviewed before appearing publicly</span>
+  </div>
+
+  <div class="comments-wrap">
+    <p class="comment-form-note">Leave a message — comments are checked before they go live, so yours may take a little while to appear.</p>
+
+    <form class="cform" id="commentForm">
+      <label class="hp-field" for="commentWebsite">Leave this field empty</label>
+      <input class="hp-field" type="text" id="commentWebsite" name="website" tabindex="-1" autocomplete="off">
+
+      <div class="cform-row">
+        <div>
+          <label>Name</label>
+          <input type="text" id="commentName" placeholder="Your name" required maxlength="100">
+        </div>
+        <div>
+          <label>Email or phone</label>
+          <input type="text" id="commentContact" placeholder="you@example.com" required maxlength="150">
+        </div>
+      </div>
+
+      <label>Your comment</label>
+      <textarea id="commentMessage" placeholder="Say something nice..." required maxlength="1000"></textarea>
+
+      <button type="submit" class="btn btn-primary" id="commentSubmitBtn">Post comment</button>
+      <div id="commentFormStatus"></div>
+    </form>
+
+    <div class="comment-list" id="commentList">
+      <div class="comment-loading">Loading comments…</div>
+    </div>
+  </div>
+</section>
+
 <!-- ================= CONTACT ================= -->
 <section id="contact">
   <div class="contact-wrap">
@@ -793,6 +853,90 @@
       // form continues submitting normally to FormSubmit in the same tab
     });
   }
+</script>
+
+<script>
+(function () {
+  const API_BASE = 'https://kushaagra-comments-api.onrender.com';
+
+  const form = document.getElementById('commentForm');
+  const statusEl = document.getElementById('commentFormStatus');
+  const listEl = document.getElementById('commentList');
+  const submitBtn = document.getElementById('commentSubmitBtn');
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function formatDate(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  async function loadComments() {
+    try {
+      const res = await fetch(`${API_BASE}/api/comments`);
+      const comments = await res.json();
+      if (!Array.isArray(comments) || comments.length === 0) {
+        listEl.innerHTML = '<div class="comment-empty">No comments yet — be the first to say hello.</div>';
+        return;
+      }
+      listEl.innerHTML = comments.map(c => `
+        <div class="comment-item">
+          <div class="comment-head">
+            <span class="comment-name">${escapeHtml(c.name)}</span>
+            <span class="comment-date">${formatDate(c.created_at)}</span>
+          </div>
+          <div class="comment-message">${escapeHtml(c.message)}</div>
+        </div>
+      `).join('');
+    } catch (err) {
+      listEl.innerHTML = '<div class="comment-empty">Could not load comments right now.</div>';
+    }
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    statusEl.textContent = '';
+    statusEl.className = '';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Posting...';
+
+    const payload = {
+      name: document.getElementById('commentName').value.trim(),
+      contact: document.getElementById('commentContact').value.trim(),
+      message: document.getElementById('commentMessage').value.trim(),
+      website: document.getElementById('commentWebsite').value,
+    };
+
+    try {
+      const res = await fetch(`${API_BASE}/api/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        statusEl.textContent = data.error || 'Something went wrong.';
+        statusEl.className = 'error';
+      } else {
+        statusEl.textContent = data.note || 'Thanks! Your comment is awaiting approval.';
+        statusEl.className = 'success';
+        form.reset();
+      }
+    } catch (err) {
+      statusEl.textContent = 'Could not reach the server. Please try again later.';
+      statusEl.className = 'error';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Post comment';
+    }
+  });
+
+  loadComments();
+})();
 </script>
 
 </body>
