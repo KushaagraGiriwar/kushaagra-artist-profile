@@ -308,7 +308,7 @@
   .testimonial p.who{font-size:0.85rem;color:var(--ivory-dim);}
 
   /* ---------- Comments (styled as testimonial quote cards) ---------- */
-  .comments-wrap{max-width:1100px;}
+  .comments-wrap{width:100%;}
   .comment-form-note{font-size:0.85rem;color:var(--ivory-dim);margin-bottom:22px;}
   #commentForm{max-width:720px;}
   #commentForm .cform-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
@@ -317,28 +317,36 @@
   #commentFormStatus{font-size:0.88rem;margin-top:10px;min-height:1.2em;}
   #commentFormStatus.success{color:var(--brass);}
   #commentFormStatus.error{color:var(--wine);}
-  .comment-list{margin-top:50px;border-top:1px solid var(--line);padding-top:44px;}
+  .comment-list{position:relative;margin-top:50px;border-top:1px solid var(--line);padding-top:44px;}
   .comment-list-scroll{
-    display:grid;grid-template-columns:repeat(3,1fr);gap:30px;
-    max-height:420px;overflow-y:auto;overflow-x:hidden;
-    scrollbar-width:thin;scrollbar-color:var(--brass) transparent;
-    padding-bottom:6px;
+    display:flex;gap:30px;
+    overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;-ms-overflow-style:none;
+    scroll-behavior:smooth;
   }
-  .comment-list-scroll::-webkit-scrollbar{width:6px;}
-  .comment-list-scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;}
-  .comment-list-scroll.expanded{max-height:none;overflow-y:visible;}
-  .comment-item{border-top:2px solid var(--brass);padding-top:20px;}
+  .comment-list-scroll::-webkit-scrollbar{display:none;}
+  .comment-item{
+    flex:0 0 calc((100% - 60px) / 3);
+    scroll-snap-align:start;
+    border-top:2px solid var(--brass);padding-top:20px;
+  }
   .comment-item .comment-message{font-family:'Fraunces',serif;font-size:1.1rem;font-style:italic;margin-bottom:16px;color:var(--ivory);line-height:1.5;}
   .comment-item .comment-head{display:flex;flex-direction:column;gap:2px;}
   .comment-item .comment-name{font-size:0.85rem;color:var(--ivory-dim);}
   .comment-item .comment-name::before{content:"— ";}
   .comment-item .comment-date{font-size:0.78rem;color:var(--ivory-dim);opacity:0.7;}
-  .comment-view-all{
-    display:block;margin:18px auto 0;background:transparent;border:1px solid var(--line);
-    color:var(--ivory-dim);padding:10px 26px;border-radius:30px;font-size:0.85rem;
-    cursor:pointer;transition:all .2s;
+  .comment-arrow{
+    position:absolute;top:calc(50% + 22px);transform:translateY(-50%);
+    width:44px;height:44px;border-radius:50%;
+    background:var(--ink);border:1px solid var(--line);color:var(--ivory);
+    display:flex;align-items:center;justify-content:center;font-size:1.3rem;
+    cursor:pointer;transition:all .2s;z-index:5;
   }
-  .comment-view-all:hover{border-color:var(--brass);color:var(--brass);}
+  .comment-arrow:hover{background:var(--brass);color:var(--ink);border-color:var(--brass);}
+  .comment-arrow-prev{left:-18px;}
+  .comment-arrow-next{right:-18px;}
+  .comment-arrow[disabled]{opacity:0.25;cursor:default;pointer-events:none;}
   .comment-empty, .comment-loading{color:var(--ivory-dim);font-size:0.92rem;padding:20px 0;}
   .hp-field{position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;}
   @media(max-width:700px){
@@ -383,7 +391,10 @@
   @media(max-width:860px){
     .nav-links{display:none;}
     .about-grid,.contact-wrap{grid-template-columns:1fr;gap:40px;}
-    .fee-grid,.testimonial-row,.comment-list-scroll{grid-template-columns:1fr;}
+    .fee-grid,.testimonial-row{grid-template-columns:1fr;}
+    .comment-item{flex:0 0 100%;}
+    .comment-arrow-prev{left:-8px;}
+    .comment-arrow-next{right:-8px;}
     .gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:140px;}
     .gallery .g-item:nth-child(1){grid-column:span 2;}
   }
@@ -652,10 +663,11 @@
     </form>
 
     <div class="comment-list">
+      <button class="comment-arrow comment-arrow-prev" id="commentPrevBtn" aria-label="Previous comments" style="display:none;">&#8249;</button>
       <div class="comment-list-scroll" id="commentList">
         <div class="comment-loading">Loading comments…</div>
       </div>
-      <button class="comment-view-all" id="commentViewAllBtn" style="display:none;">View all comments</button>
+      <button class="comment-arrow comment-arrow-next" id="commentNextBtn" aria-label="Next comments" style="display:none;">&#8250;</button>
     </div>
   </div>
 </section>
@@ -861,7 +873,8 @@
   const statusEl = document.getElementById('commentFormStatus');
   const listEl = document.getElementById('commentList');
   const submitBtn = document.getElementById('commentSubmitBtn');
-  const viewAllBtn = document.getElementById('commentViewAllBtn');
+  const prevBtn = document.getElementById('commentPrevBtn');
+  const nextBtn = document.getElementById('commentNextBtn');
 
   function escapeHtml(str) {
     const div = document.createElement('div');
@@ -874,13 +887,27 @@
     return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
   }
 
+  function scrollAmount() {
+    const item = listEl.querySelector('.comment-item');
+    if (!item) return 300;
+    const gap = 30;
+    return item.getBoundingClientRect().width + gap;
+  }
+
+  function updateArrowState() {
+    const maxScroll = listEl.scrollWidth - listEl.clientWidth;
+    prevBtn.disabled = listEl.scrollLeft <= 4;
+    nextBtn.disabled = listEl.scrollLeft >= maxScroll - 4;
+  }
+
   async function loadComments() {
     try {
       const res = await fetch(`${API_BASE}/api/comments`);
       const comments = await res.json();
       if (!Array.isArray(comments) || comments.length === 0) {
         listEl.innerHTML = '<div class="comment-empty">No comments yet — be the first to say hello.</div>';
-        viewAllBtn.style.display = 'none';
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
         return;
       }
       listEl.innerHTML = comments.map(c => `
@@ -892,24 +919,31 @@
           </div>
         </div>
       `).join('');
-      // Show the "view all" button only if there are enough comments to
-      // actually overflow the scrollable preview box (roughly 4+).
-      listEl.classList.remove('expanded');
-      viewAllBtn.textContent = 'View all comments';
-      if (comments.length > 4) {
-        viewAllBtn.style.display = 'block';
+      // Only show arrows if there are more than fit on screen at once (3 on desktop).
+      if (comments.length > 3) {
+        prevBtn.style.display = 'flex';
+        nextBtn.style.display = 'flex';
+        listEl.scrollLeft = 0;
+        updateArrowState();
       } else {
-        viewAllBtn.style.display = 'none';
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
       }
     } catch (err) {
       listEl.innerHTML = '<div class="comment-empty">Could not load comments right now.</div>';
-      viewAllBtn.style.display = 'none';
+      prevBtn.style.display = 'none';
+      nextBtn.style.display = 'none';
     }
   }
 
-  viewAllBtn.addEventListener('click', function () {
-    const isExpanded = listEl.classList.toggle('expanded');
-    viewAllBtn.textContent = isExpanded ? 'Show fewer' : 'View all comments';
+  prevBtn.addEventListener('click', function () {
+    listEl.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
+  });
+  nextBtn.addEventListener('click', function () {
+    listEl.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+  });
+  listEl.addEventListener('scroll', function () {
+    window.requestAnimationFrame(updateArrowState);
   });
 
   form.addEventListener('submit', async function (e) {
