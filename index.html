@@ -171,7 +171,10 @@
     border:1px solid var(--line);
     overflow:hidden;
     max-width:280px;
+    cursor:pointer;
+    transition:border-color .2s;
   }
+  .video-card:hover{border-color:var(--brass);}
   .video-thumb{
     aspect-ratio:9/16;
     background:linear-gradient(135deg,#23262f,#181a20);
@@ -183,23 +186,16 @@
     padding:16px;
   }
   .play-btn{
-    width:52px;height:52px;border-radius:50%;
+    width:56px;height:56px;border-radius:50%;
     border:1.5px solid var(--ivory);
     display:flex;align-items:center;justify-content:center;
-    margin-bottom:10px;
-    transition:background .2s;
+    transition:background .2s, border-color .2s;
+    font-size:1.1rem;padding-left:4px;
   }
-  .video-card:hover .play-btn{background:var(--brass);border-color:var(--brass);}
-  .video-info{padding:18px 20px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .video-card:hover .play-btn{background:var(--brass);border-color:var(--brass);color:var(--ink);}
+  .video-info{padding:18px 20px;}
   .video-info h3{font-size:1.05rem;margin-bottom:6px;font-weight:600;}
   .video-info p{font-size:0.85rem;color:var(--ivory-dim);}
-  .video-expand-btn{
-    flex-shrink:0;width:32px;height:32px;border-radius:50%;
-    border:1px solid var(--line);background:transparent;color:var(--ivory-dim);
-    display:flex;align-items:center;justify-content:center;font-size:0.95rem;
-    cursor:pointer;transition:all .2s;margin-top:2px;
-  }
-  .video-expand-btn:hover{background:var(--brass);border-color:var(--brass);color:var(--ink);}
 
   /* ---------- Video lightbox ---------- */
   .video-lightbox{
@@ -467,82 +463,82 @@
 
   <div class="video-panel active" id="solo">
     <div class="video-card" data-vidx="0" data-panel="solo" data-src="https://drive.google.com/file/d/1KbKGiDIx1dN0Qx34uIpK5eJPkXZ-jNQB/preview" data-title="ThePianoMan (TPM)" data-venue="Safdarjang">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1KbKGiDIx1dN0Qx34uIpK5eJPkXZ-jNQB/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>ThePianoMan (TPM)</h3><p>Safdarjang</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>ThePianoMan (TPM)</h3><p>Safdarjang</p></div></div>
     </div>
     <div class="video-card" data-vidx="1" data-panel="solo" data-src="https://drive.google.com/file/d/17-Kq4uuI2NT5XQwrxSE5kyAkI1TjJliW/preview" data-title="Saiyaara" data-venue="@ DTU">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/17-Kq4uuI2NT5XQwrxSE5kyAkI1TjJliW/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Saiyaara</h3><p>@ DTU</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Saiyaara</h3><p>@ DTU</p></div></div>
     </div>
     <div class="video-card" data-vidx="2" data-panel="solo" data-src="https://drive.google.com/file/d/1zSn32FVcwqmvP1MT451zJePR5bkicsTY/preview" data-title="Dancing Numbers" data-venue="@ Breath">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1zSn32FVcwqmvP1MT451zJePR5bkicsTY/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Dancing Numbers</h3><p>@ Breath</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Dancing Numbers</h3><p>@ Breath</p></div></div>
     </div>
     <div class="video-card" data-vidx="3" data-panel="solo" data-src="https://drive.google.com/file/d/1BIsMvRv0ZGJBf2bft4dLW5vD1B3CPwWH/preview" data-title="Khamoshiyan" data-venue="@ Social, Civil Lines">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1BIsMvRv0ZGJBf2bft4dLW5vD1B3CPwWH/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Khamoshiyan</h3><p>@ Social, Civil Lines</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Khamoshiyan</h3><p>@ Social, Civil Lines</p></div></div>
     </div>
     <div class="video-card" data-vidx="4" data-panel="solo" data-src="https://drive.google.com/file/d/1Lc6ku2zLyBrTBuFd81kRg_xXzAtW0oKZ/preview" data-title="Kaise Hua" data-venue="@ CVS">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1Lc6ku2zLyBrTBuFd81kRg_xXzAtW0oKZ/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Kaise Hua</h3><p>@ CVS</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Kaise Hua</h3><p>@ CVS</p></div></div>
     </div>
     <div class="video-card" data-vidx="5" data-panel="solo" data-src="https://drive.google.com/file/d/1rsXGdek_YjhLWAnn1yH4DUcNY3DMV9gr/preview" data-title="Retro Mashup" data-venue="@ FLOS">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1rsXGdek_YjhLWAnn1yH4DUcNY3DMV9gr/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Retro Mashup</h3><p>@ FLOS</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Retro Mashup</h3><p>@ FLOS</p></div></div>
     </div>
   </div>
 
   <div class="video-panel" id="duo">
     <div class="video-card" data-vidx="0" data-panel="duo" data-src="https://drive.google.com/file/d/17rvMxsr93D-lo15WL6pHoj1mvE7SkqcU/preview" data-title="Ye Tune Kya Kiya" data-venue="@ Rajdhani College">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/17rvMxsr93D-lo15WL6pHoj1mvE7SkqcU/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Ye Tune Kya Kiya</h3><p>@ Rajdhani College</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Ye Tune Kya Kiya</h3><p>@ Rajdhani College</p></div></div>
     </div>
     <div class="video-card" data-vidx="1" data-panel="duo" data-src="https://drive.google.com/file/d/1-TVTjlxA0THgGe0hXRpgM2FM3kKNbnJh/preview" data-title="O O Jaane Jaana" data-venue="@ Social">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1-TVTjlxA0THgGe0hXRpgM2FM3kKNbnJh/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>O O Jaane Jaana</h3><p>@ Social</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>O O Jaane Jaana</h3><p>@ Social</p></div></div>
     </div>
     <div class="video-card" data-vidx="2" data-panel="duo" data-src="https://drive.google.com/file/d/12OYTr4QCdkrKAoz2h4p1k1oSkwTlCu4g/preview" data-title="Pehli Nazar Mein" data-venue="@ Miranda House">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/12OYTr4QCdkrKAoz2h4p1k1oSkwTlCu4g/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Pehli Nazar Mein</h3><p>@ Miranda House</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Pehli Nazar Mein</h3><p>@ Miranda House</p></div></div>
     </div>
     <div class="video-card" data-vidx="3" data-panel="duo" data-src="https://drive.google.com/file/d/1W6jUl0k6v35twLGKUR8V5QyOo6BrlVZ_/preview" data-title="Chura Liya Hai Tumne Jo Dil Ko" data-venue="@ Miranda House">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1W6jUl0k6v35twLGKUR8V5QyOo6BrlVZ_/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Chura Liya Hai Tumne Jo Dil Ko</h3><p>@ Miranda House</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Chura Liya Hai Tumne Jo Dil Ko</h3><p>@ Miranda House</p></div></div>
     </div>
     <div class="video-card" data-vidx="4" data-panel="duo" data-src="https://drive.google.com/file/d/1bzktVhWWuoF5FYFk3k3Pz8IAQgrblKQz/preview" data-title="Ajeeb Dastan" data-venue="@ Mazi Cafe">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1bzktVhWWuoF5FYFk3k3Pz8IAQgrblKQz/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Ajeeb Dastan</h3><p>@ Mazi Cafe</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Ajeeb Dastan</h3><p>@ Mazi Cafe</p></div></div>
     </div>
     <div class="video-card" data-vidx="5" data-panel="duo" data-src="https://drive.google.com/file/d/1Wv9CzikuCdVezXZqA0hDA21cJH5e2QKQ/preview" data-title="Sahiba" data-venue="Duo performance">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1Wv9CzikuCdVezXZqA0hDA21cJH5e2QKQ/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Sahiba</h3><p>Duo performance</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Sahiba</h3><p>Duo performance</p></div></div>
     </div>
   </div>
 
   <div class="video-panel" id="band">
     <div class="video-card" data-vidx="0" data-panel="band" data-src="https://drive.google.com/file/d/1q8zeNlI2udxMOenvhGZXV2WeEuEZLzIg/preview" data-title="Khuda Jaane" data-venue="Full band, live">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1q8zeNlI2udxMOenvhGZXV2WeEuEZLzIg/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Khuda Jaane</h3><p>Full band, live</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Khuda Jaane</h3><p>Full band, live</p></div></div>
     </div>
     <div class="video-card" data-vidx="1" data-panel="band" data-src="https://drive.google.com/file/d/1Di5dQEhMygiwkM4uH08nChrHEPRrd-IF/preview" data-title="Zara Sa" data-venue="Full band, live">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1Di5dQEhMygiwkM4uH08nChrHEPRrd-IF/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Zara Sa</h3><p>Full band, live</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Zara Sa</h3><p>Full band, live</p></div></div>
     </div>
     <div class="video-card" data-vidx="2" data-panel="band" data-src="https://drive.google.com/file/d/1lQS9Migu11L7lPJdjoX4D3eyas63gCvw/preview" data-title="Ae Dil Hai Mushkil" data-venue="Full band, live">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1lQS9Migu11L7lPJdjoX4D3eyas63gCvw/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Ae Dil Hai Mushkil</h3><p>Full band, live</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Ae Dil Hai Mushkil</h3><p>Full band, live</p></div></div>
     </div>
     <div class="video-card" data-vidx="3" data-panel="band" data-src="https://drive.google.com/file/d/1_aZk2Vka5CG3Lt9HiCQ9uIT4nt5S0j-l/preview" data-title="Yeh Fitoor Mera" data-venue="Full band, live">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1_aZk2Vka5CG3Lt9HiCQ9uIT4nt5S0j-l/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Yeh Fitoor Mera</h3><p>Full band, live</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Yeh Fitoor Mera</h3><p>Full band, live</p></div></div>
     </div>
     <div class="video-card" data-vidx="4" data-panel="band" data-src="https://drive.google.com/file/d/1ntExhAMFSj6bASEhc0PaKvm94Zlriomf/preview" data-title="Jo Bheji Thi Dua" data-venue="Full band, live">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1ntExhAMFSj6bASEhc0PaKvm94Zlriomf/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Jo Bheji Thi Dua</h3><p>Full band, live</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Jo Bheji Thi Dua</h3><p>Full band, live</p></div></div>
     </div>
     <div class="video-card" data-vidx="5" data-panel="band" data-src="https://drive.google.com/file/d/1P-fnJPFzjsHI5UNzPWblwwiL_xuBQf_4/preview" data-title="Ud-da Punjab" data-venue="Full band, live">
-      <div class="video-thumb"><iframe src="https://drive.google.com/file/d/1P-fnJPFzjsHI5UNzPWblwwiL_xuBQf_4/preview" allow="autoplay" loading="lazy" style="width:100%;height:100%;border:0;"></iframe></div>
-      <div class="video-info"><div><h3>Ud-da Punjab</h3><p>Full band, live</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
+      <div class="video-thumb"><div class="play-btn">&#9658;</div></div>
+      <div class="video-info"><div><h3>Ud-da Punjab</h3><p>Full band, live</p></div></div>
     </div>
   </div>
 </section>
@@ -798,23 +794,38 @@
     return Array.from(document.querySelectorAll('.video-card[data-panel="' + panelId + '"]'));
   }
 
+  function requestFs(el){
+    const fn = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+    if (fn) { fn.call(el).catch(() => {}); }
+  }
+  function exitFs(){
+    const isFs = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+    if (!isFs) return;
+    const fn = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+    if (fn) { fn.call(document).catch(() => {}); }
+  }
+
   function openVideoLightbox(panelId, idx){
     currentPanelCards = getPanelCards(panelId);
     currentVIdx = idx;
     updateVideoLightbox();
     videoLightbox.classList.add('open');
+    requestFs(videoLightbox);
   }
   function updateVideoLightbox(){
     const card = currentPanelCards[currentVIdx];
     const src = card.dataset.src;
-    vlbFrame.innerHTML = '<iframe src="' + src + '" allow="autoplay" allowfullscreen></iframe>';
+    // Video only starts loading/playing once it's actually shown here —
+    // never plays inline on the card itself, so there's no double playback.
+    vlbFrame.innerHTML = '<iframe src="' + src + '" allow="autoplay; fullscreen" allowfullscreen></iframe>';
     vlbTitle.textContent = card.dataset.title;
     vlbVenue.textContent = card.dataset.venue;
     vlbCount.textContent = (currentVIdx + 1) + ' / ' + currentPanelCards.length;
   }
   function closeVideoLightbox(){
     videoLightbox.classList.remove('open');
-    vlbFrame.innerHTML = '';
+    vlbFrame.innerHTML = ''; // stops playback completely
+    exitFs();
   }
   function showVideoNext(){
     currentVIdx = (currentVIdx + 1) % currentPanelCards.length;
@@ -825,10 +836,8 @@
     updateVideoLightbox();
   }
 
-  document.querySelectorAll('.video-expand-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const card = btn.closest('.video-card');
+  document.querySelectorAll('.video-card').forEach(card => {
+    card.addEventListener('click', () => {
       openVideoLightbox(card.dataset.panel, parseInt(card.dataset.vidx, 10));
     });
   });
@@ -843,6 +852,18 @@
     if (e.key === 'ArrowRight') showVideoNext();
     if (e.key === 'ArrowLeft') showVideoPrev();
     if (e.key === 'Escape') closeVideoLightbox();
+  });
+  // If the user exits fullscreen directly (Esc, back gesture, browser
+  // control) rather than our own close button, close the modal too so
+  // state stays in sync and the video actually stops.
+  ['fullscreenchange', 'webkitfullscreenchange', 'msfullscreenchange'].forEach(evt => {
+    document.addEventListener(evt, () => {
+      const isFs = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+      if (!isFs && videoLightbox.classList.contains('open')) {
+        videoLightbox.classList.remove('open');
+        vlbFrame.innerHTML = '';
+      }
+    });
   });
   // ---------- Booking form: open WhatsApp pre-filled on submit ----------
   const bookingForm = document.getElementById('bookingForm');
