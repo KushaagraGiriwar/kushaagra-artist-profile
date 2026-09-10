@@ -629,6 +629,8 @@
       <input type="text" name="Name" placeholder="Your name" required>
       <label>Email</label>
       <input type="email" name="Email" placeholder="you@example.com" required>
+      <label>Phone / WhatsApp</label>
+      <input type="tel" name="Phone" placeholder="+91 XXXXX XXXXX" required>
       <label>Event date</label>
       <input type="date" name="Event Date">
       <label>Format needed</label>
@@ -775,12 +777,14 @@
   if (bookingForm) {
     bookingForm.addEventListener('submit', function () {
       const name = bookingForm.querySelector('[name="Name"]').value || 'there';
+      const phone = bookingForm.querySelector('[name="Phone"]').value;
       const format = bookingForm.querySelector('[name="Format"]').value;
       const date = bookingForm.querySelector('[name="Event Date"]').value;
       const details = bookingForm.querySelector('[name="Event Details"]').value;
       const msg =
         'Hi Kushaagra! I just sent a booking inquiry from your website.\n\n' +
         'Name: ' + name + '\n' +
+        'Phone: ' + phone + '\n' +
         'Format: ' + format + '\n' +
         (date ? 'Event date: ' + date + '\n' : '') +
         (details ? 'Details: ' + details : '');
