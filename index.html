@@ -607,12 +607,11 @@
   <div class="contact-wrap">
     <div>
       <h2>Let's work together</h2>
-      <span class="edit-hint">EDIT: set your real email / phone / socials</span>
-      <a href="mailto:you@example.com" class="big-email">you@example.com</a>
+      <a href="mailto:kushaagragiriwar@gmail.com" class="big-email">kushaagragiriwar@gmail.com</a>
       <div class="contact-details">
-        <div>Phone / WhatsApp: +91 XXXXX XXXXX</div>
-        <div>Based in: City, Country</div>
-        <div>Available for: Weddings · Festivals · Corporate · Private events</div>
+        <div>Phone / WhatsApp: +91 88519 78627</div>
+        <div>Based in: New Delhi / Noida / Gurgaon</div>
+        <div>Available for: Weddings · College fests · Corporate · Private events</div>
       </div>
       <div class="socials">
         <a href="#" title="Instagram">IG</a>
@@ -621,23 +620,28 @@
         <a href="#" title="Facebook">FB</a>
       </div>
     </div>
-    <form class="cform" onsubmit="return false;">
+    <form class="cform" id="bookingForm" action="https://formsubmit.co/kushaagragiriwar@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="New booking inquiry from website">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="https://kushaagragiriwar.github.io/kushaagra-artist-profile/#thankyou">
       <label>Name</label>
-      <input type="text" placeholder="Your name">
+      <input type="text" name="Name" placeholder="Your name" required>
       <label>Email</label>
-      <input type="email" placeholder="you@example.com">
+      <input type="email" name="Email" placeholder="you@example.com" required>
       <label>Event date</label>
-      <input type="date">
+      <input type="date" name="Event Date">
       <label>Format needed</label>
-      <select>
+      <select name="Format">
         <option>Solo</option>
         <option>Duo</option>
         <option>Band</option>
         <option>Not sure yet</option>
       </select>
       <label>Tell me about your event</label>
-      <textarea placeholder="Venue, city, expected guests, budget..."></textarea>
+      <textarea name="Event Details" placeholder="Venue, city, expected guests, budget..."></textarea>
       <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Send inquiry</button>
+      <p style="font-size:0.78rem;color:var(--ivory-dim);margin-top:10px;text-align:center;">This will also open WhatsApp with your message pre-filled — just hit send there too.</p>
     </form>
   </div>
 </section>
@@ -766,6 +770,25 @@
     if (e.key === 'ArrowLeft') showVideoPrev();
     if (e.key === 'Escape') closeVideoLightbox();
   });
+  // ---------- Booking form: open WhatsApp pre-filled on submit ----------
+  const bookingForm = document.getElementById('bookingForm');
+  if (bookingForm) {
+    bookingForm.addEventListener('submit', function () {
+      const name = bookingForm.querySelector('[name="Name"]').value || 'there';
+      const format = bookingForm.querySelector('[name="Format"]').value;
+      const date = bookingForm.querySelector('[name="Event Date"]').value;
+      const details = bookingForm.querySelector('[name="Event Details"]').value;
+      const msg =
+        'Hi Kushaagra! I just sent a booking inquiry from your website.\n\n' +
+        'Name: ' + name + '\n' +
+        'Format: ' + format + '\n' +
+        (date ? 'Event date: ' + date + '\n' : '') +
+        (details ? 'Details: ' + details : '');
+      const waUrl = 'https://wa.me/918851978627?text=' + encodeURIComponent(msg);
+      window.open(waUrl, '_blank');
+      // form continues submitting normally to FormSubmit in the same tab
+    });
+  }
 </script>
 
 </body>
