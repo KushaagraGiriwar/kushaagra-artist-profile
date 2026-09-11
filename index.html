@@ -302,6 +302,11 @@
   }
   .admin-add-photo #adminAddPhotoStatus{font-size:0.82rem;color:var(--ivory-dim);width:100%;}
   .g-item{position:relative;}
+  .gallery-show-more-btn{
+    display:block;
+    margin:26px auto 0;
+    padding:12px 30px;
+  }
   .g-item .g-delete-btn{
     position:absolute;top:8px;right:8px;z-index:3;
     width:30px;height:30px;border-radius:50%;
@@ -1006,6 +1011,8 @@
   const lbImg = document.getElementById('lbImg');
   const lbCount = document.getElementById('lbCount');
   let galleryPhotos = [];
+  let galleryShowAll = false;
+  const GALLERY_INITIAL_COUNT = 9; // roughly 2–3 rows given the grid's special item spans
   let currentIdx = 0;
 
   function openLightbox(idx){
@@ -1046,9 +1053,15 @@
   function renderGallery(){
     if (galleryPhotos.length === 0) {
       galleryGrid.innerHTML = '<div class="comment-empty">No photos yet.</div>';
+      const existingBtn = document.getElementById('galleryShowMoreBtn');
+      if (existingBtn) existingBtn.remove();
       return;
     }
-    galleryGrid.innerHTML = galleryPhotos.map((photo, idx) => `
+    const visiblePhotos = galleryShowAll
+      ? galleryPhotos.map((photo, idx) => ({ photo, idx }))
+      : galleryPhotos.map((photo, idx) => ({ photo, idx })).slice(0, GALLERY_INITIAL_COUNT);
+
+    galleryGrid.innerHTML = visiblePhotos.map(({ photo, idx }) => `
       <div class="g-item">
         ${isAdminLoggedIn ? `
           <button class="g-feature-btn ${photo.featured ? 'featured' : ''}" data-photo-id="${photo.id}" data-featured="${photo.featured ? '1' : '0'}" aria-label="Feature on homepage" title="${photo.featured ? 'Featured on homepage — click to remove' : 'Click to feature on homepage slideshow'}">&#9733;</button>
@@ -1057,8 +1070,8 @@
         <img src="${photo.url}" alt="${(photo.alt || '').replace(/"/g,'&quot;')}" loading="lazy" data-idx="${idx}" style="width:100%;height:100%;object-fit:cover;">
       </div>
     `).join('');
-    galleryGrid.querySelectorAll('img').forEach((img, idx) => {
-      img.addEventListener('click', () => openLightbox(idx));
+    galleryGrid.querySelectorAll('img').forEach((img) => {
+      img.addEventListener('click', () => openLightbox(parseInt(img.dataset.idx, 10)));
     });
     galleryGrid.querySelectorAll('.g-delete-btn').forEach(btn => {
       btn.addEventListener('click', async (e) => {
@@ -1091,6 +1104,30 @@
         }
       });
     });
+
+    renderGalleryShowMoreButton();
+  }
+
+  function renderGalleryShowMoreButton(){
+    let btn = document.getElementById('galleryShowMoreBtn');
+    const hasMore = galleryPhotos.length > GALLERY_INITIAL_COUNT;
+
+    if (!hasMore) {
+      if (btn) btn.remove();
+      return;
+    }
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.id = 'galleryShowMoreBtn';
+      btn.className = 'btn btn-ghost gallery-show-more-btn';
+      galleryGrid.insertAdjacentElement('afterend', btn);
+      btn.addEventListener('click', () => {
+        galleryShowAll = !galleryShowAll;
+        renderGallery();
+      });
+    }
+    const remaining = galleryPhotos.length - GALLERY_INITIAL_COUNT;
+    btn.textContent = galleryShowAll ? 'Show less' : `Show more (${remaining} more)`;
   }
 
   async function loadPhotos(){
