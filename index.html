@@ -279,6 +279,15 @@
     cursor:pointer;transition:all .2s;
   }
   .g-item .g-delete-btn:hover{background:var(--wine);}
+  .g-item .g-feature-btn{
+    position:absolute;top:8px;left:8px;z-index:3;
+    width:30px;height:30px;border-radius:50%;
+    background:rgba(10,11,14,0.85);border:1px solid var(--line);color:var(--ivory-dim);
+    display:flex;align-items:center;justify-content:center;font-size:1rem;
+    cursor:pointer;transition:all .2s;
+  }
+  .g-item .g-feature-btn:hover{border-color:var(--brass);color:var(--brass);}
+  .g-item .g-feature-btn.featured{background:var(--brass);border-color:var(--brass);color:var(--ink);}
   #adminFooterArea a{cursor:pointer;}
 
   /* ---------- Lightbox ---------- */
@@ -849,7 +858,10 @@
     }
     galleryGrid.innerHTML = galleryPhotos.map((photo, idx) => `
       <div class="g-item">
-        ${isAdminLoggedIn ? `<button class="g-delete-btn" data-photo-id="${photo.id}" aria-label="Delete photo">&times;</button>` : ''}
+        ${isAdminLoggedIn ? `
+          <button class="g-feature-btn ${photo.featured ? 'featured' : ''}" data-photo-id="${photo.id}" data-featured="${photo.featured ? '1' : '0'}" aria-label="Feature on homepage" title="${photo.featured ? 'Featured on homepage — click to remove' : 'Click to feature on homepage slideshow'}">&#9733;</button>
+          <button class="g-delete-btn" data-photo-id="${photo.id}" aria-label="Delete photo">&times;</button>
+        ` : ''}
         <img src="${photo.url}" alt="${(photo.alt || '').replace(/"/g,'&quot;')}" loading="lazy" data-idx="${idx}" style="width:100%;height:100%;object-fit:cover;">
       </div>
     `).join('');
@@ -871,6 +883,22 @@
         }
       });
     });
+    galleryGrid.querySelectorAll('.g-feature-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const newFeatured = btn.dataset.featured !== '1';
+        try {
+          await fetch(`${COMMENTS_API_BASE}/api/admin/photos/${btn.dataset.photoId}/featured`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
+            body: JSON.stringify({ featured: newFeatured }),
+          });
+          loadPhotos();
+        } catch (err) {
+          alert('Could not update photo. Please try again.');
+        }
+      });
+    });
   }
 
   async function loadPhotos(){
@@ -878,7 +906,8 @@
       const res = await fetch(`${COMMENTS_API_BASE}/api/photos`);
       galleryPhotos = await res.json();
       renderGallery();
-      initHeroSlideshow(galleryPhotos);
+      const featured = galleryPhotos.filter(p => p.featured);
+      initHeroSlideshow(featured.length > 0 ? featured : galleryPhotos);
     } catch (err) {
       galleryGrid.innerHTML = '<div class="comment-empty">Could not load photos right now.</div>';
     }
