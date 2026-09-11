@@ -630,7 +630,7 @@
   height: 480px;
   width: 100%;
   border: 1px solid var(--line);
-  filter: saturate(0.9);
+  background: var(--ink-2);
 }
 .map-note {
   font-size: 0.85rem;
@@ -638,36 +638,28 @@
   margin-top: 16px;
 }
 .pm-marker {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   background: var(--brass);
   border: 2px solid var(--ivory);
   border-radius: 50%;
   box-shadow: 0 0 0 4px rgba(201,162,39,0.25);
+  cursor: pointer;
 }
-.leaflet-popup-content-wrapper {
+/* Fake a dark map style on top of plain OpenStreetMap tiles (no API key needed) */
+#perfmap .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.92) saturate(0.6);
+}
+.leaflet-tooltip.pm-tooltip {
   background: var(--ink-2);
   color: var(--ivory);
   border: 1px solid var(--brass);
   border-radius: 2px;
-}
-.leaflet-popup-tip {
-  background: var(--ink-2);
-  border: 1px solid var(--brass);
-}
-.leaflet-popup-content h4 {
-  font-family: 'Fraunces', serif;
-  font-size: 1rem;
-  margin-bottom: 6px;
-  color: var(--brass);
-}
-.leaflet-popup-content ul {
-  margin: 0;
-  padding-left: 18px;
+  font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
-  color: var(--ivory-dim);
+  padding: 6px 10px;
 }
-.leaflet-popup-content li { padding: 2px 0; }
+.leaflet-tooltip.pm-tooltip::before { border-top-color: var(--brass); }
 .leaflet-control-attribution {
   background: rgba(20,22,27,0.75) !important;
   color: var(--ivory-dim) !important;
@@ -880,7 +872,7 @@
 <span class="edit-hint">Colleges, clubs & cafes across Delhi NCR</span>
 </div>
 <div id="perfmap"></div>
-<p class="map-note">Map centered on Delhi NCR. Tap a pin to see the venue(s) at that spot. Grouped pins (e.g. Punjabi Bagh, Hudson Lane) cover multiple venues in the same immediate area.</p>
+<p class="map-note">Map centered on Delhi NCR — 25 venues across colleges, clubs and cafes. Hover a pin to see the name, click it to open that location in Google Maps.</p>
 </section>
 
 <section id="fees" class="ambient" style="--glow-x:90%;--glow-y:10%;--glow-x2:10%;--glow-y2:90%;">
@@ -1696,53 +1688,62 @@
 <script>
 (function () {
   const venues = [
-    { lat: 28.7500, lng: 77.1170, title: "DTU", items: ["Delhi Technological University"] },
-    { lat: 28.6929, lng: 77.2102, title: "Miranda House", items: ["Miranda House, Delhi University"] },
-    { lat: 28.6548, lng: 77.1258, title: "Rajdhani College", items: ["Rajdhani College, Delhi University"] },
-    { lat: 28.5350, lng: 77.2590, title: "ANDC", items: ["Acharya Narendra Dev College, Kalkaji"] },
-    { lat: 28.6795, lng: 77.2225, title: "Social — Civil Lines", items: ["Social, Civil Lines"] },
-    { lat: 28.6467, lng: 77.1225, title: "Social — Rajouri Garden", items: ["Social, Rajouri Garden"] },
-    { lat: 28.5610, lng: 77.2065, title: "ThePianoMan Jazz Club", items: ["ThePianoMan (TPM), Safdarjung Enclave"] },
-    { lat: 28.6315, lng: 77.2167, title: "Connaught Place", items: ["Dr. Zombie"] },
-    { lat: 28.6219, lng: 77.0878, title: "Janakpuri", items: ["Sky Rozo"] },
-    {
-      lat: 28.6742, lng: 77.1313, title: "Punjabi Bagh",
-      items: ["Third Wave Coffee", "TEO", "Verandah", "Raftaar", "Infinity", "Air", "Boussac", "Breath", "The Vaccine"]
-    },
-    {
-      lat: 28.7041, lng: 77.2088, title: "Hudson Lane (GTB Nagar)",
-      items: ["Rascal", "Houseful", "Urban Jungle"]
-    },
-    {
-      lat: 28.5921, lng: 77.0460, title: "Dwarka",
-      items: ["Cafe Uncover", "Omaxe Mall"]
-    },
-    {
-      lat: 28.5535, lng: 77.1892, title: "Hauz Khas",
-      items: ["Downtown", "Epic Cafe"]
-    },
+    { lat: 28.7500, lng: 77.1170, name: "DTU", query: "Delhi Technological University, Delhi" },
+    { lat: 28.6929, lng: 77.2102, name: "Miranda House", query: "Miranda House, Delhi University" },
+    { lat: 28.6548, lng: 77.1258, name: "Rajdhani College", query: "Rajdhani College, Delhi University" },
+    { lat: 28.5350, lng: 77.2590, name: "ANDC", query: "Acharya Narendra Dev College, Kalkaji, Delhi" },
+    { lat: 28.6795, lng: 77.2225, name: "Social — Civil Lines", query: "Social, Civil Lines, Delhi" },
+    { lat: 28.6467, lng: 77.1225, name: "Social — Rajouri Garden", query: "Social, Rajouri Garden, Delhi" },
+    { lat: 28.5610, lng: 77.2065, name: "ThePianoMan Jazz Club", query: "ThePianoMan Jazz Club, Safdarjung Enclave, Delhi" },
+    { lat: 28.6315, lng: 77.2167, name: "Dr. Zombie", query: "Dr. Zombie, Connaught Place, Delhi" },
+    { lat: 28.6219, lng: 77.0878, name: "Sky Rozo", query: "Sky Rozo, Janakpuri, Delhi" },
+
+    { lat: 28.6742, lng: 77.1313, name: "Third Wave Coffee", query: "Third Wave Coffee, Punjabi Bagh, Delhi" },
+    { lat: 28.6772, lng: 77.1333, name: "TEO", query: "TEO, Punjabi Bagh, Delhi" },
+    { lat: 28.6712, lng: 77.1333, name: "Verandah", query: "Verandah, Punjabi Bagh, Delhi" },
+    { lat: 28.6772, lng: 77.1293, name: "Raftaar", query: "Raftaar, Punjabi Bagh, Delhi" },
+    { lat: 28.6712, lng: 77.1293, name: "Infinity", query: "Infinity, Punjabi Bagh, Delhi" },
+    { lat: 28.6782, lng: 77.1313, name: "Air", query: "Air, Punjabi Bagh, Delhi" },
+    { lat: 28.6702, lng: 77.1313, name: "Boussac", query: "Boussac, Punjabi Bagh, Delhi" },
+    { lat: 28.6792, lng: 77.1313, name: "Breath", query: "Breath, Punjabi Bagh, Delhi" },
+    { lat: 28.6692, lng: 77.1313, name: "The Vaccine", query: "The Vaccine, Punjabi Bagh, Delhi" },
+
+    { lat: 28.7041, lng: 77.2088, name: "Rascal", query: "Rascal, Hudson Lane, GTB Nagar, Delhi" },
+    { lat: 28.7071, lng: 77.2108, name: "Houseful", query: "Houseful, Hudson Lane, GTB Nagar, Delhi" },
+    { lat: 28.7011, lng: 77.2108, name: "Urban Jungle", query: "Urban Jungle, Hudson Lane, GTB Nagar, Delhi" },
+
+    { lat: 28.5921, lng: 77.0460, name: "Cafe Uncover", query: "Cafe Uncover, Dwarka, Delhi" },
+    { lat: 28.5961, lng: 77.0490, name: "Omaxe Mall", query: "Omaxe Mall, Dwarka, Delhi" },
+
+    { lat: 28.5535, lng: 77.1892, name: "Downtown", query: "Downtown, Hauz Khas Village, Delhi" },
+    { lat: 28.5565, lng: 77.1912, name: "Epic Cafe", query: "Epic Cafe, Hauz Khas Village, Delhi" },
   ];
 
   const map = L.map('perfmap', {
     scrollWheelZoom: false,
   }).setView([28.635, 77.170], 11);
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  // Plain OpenStreetMap tiles — free, no API key or signup required.
+  // A CSS filter (see <style>) fakes a dark theme on top of them.
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 19,
   }).addTo(map);
 
   const pmIcon = L.divIcon({
     className: '',
     html: '<div class="pm-marker"></div>',
-    iconSize: [16, 16],
-    iconAnchor: [8, 8],
+    iconSize: [14, 14],
+    iconAnchor: [7, 7],
   });
 
   venues.forEach((v) => {
-    const listHtml = v.items.map((i) => `<li>${i}</li>`).join('');
-    const popupHtml = `<h4>${v.title}</h4><ul>${listHtml}</ul>`;
-    L.marker([v.lat, v.lng], { icon: pmIcon }).addTo(map).bindPopup(popupHtml);
+    const marker = L.marker([v.lat, v.lng], { icon: pmIcon }).addTo(map);
+    marker.bindTooltip(v.name, { className: 'pm-tooltip', direction: 'top', offset: [0, -8] });
+    marker.on('click', () => {
+      const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v.query);
+      window.open(mapsUrl, '_blank', 'noopener');
+    });
   });
 })();
 </script>
