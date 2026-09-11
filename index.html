@@ -307,6 +307,28 @@
     margin:26px auto 0;
     padding:12px 30px;
   }
+  .live-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    font-size:0.85rem;
+    color:var(--ivory-dim);
+    margin-bottom:22px;
+    padding:7px 14px;
+    border:1px solid var(--line);
+    border-radius:30px;
+  }
+  .live-dot{
+    width:8px;height:8px;
+    border-radius:50%;
+    background:#ff5555;
+    flex-shrink:0;
+    animation:live-pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes live-pulse{
+    0%,100%{opacity:1;transform:scale(1);}
+    50%{opacity:0.5;transform:scale(0.8);}
+  }
   .g-item .g-delete-btn{
     position:absolute;top:8px;right:8px;z-index:3;
     width:30px;height:30px;border-radius:50%;
@@ -654,6 +676,10 @@
     <div class="hero-kicker">Bollywood &amp; Semi-Classical Vocalist</div>
     <h1>Kushaagra<br>Giriwar</h1>
     <p class="tag">Solo sets, intimate duo shows, or a full live band — Bollywood and semi-classical music built for weddings, college fests, corporate events and private nights that need to be remembered.</p>
+    <div class="live-badge" id="liveBadge" style="display:none;">
+      <span class="live-dot"></span>
+      <span id="liveBadgeText">— people viewing now</span>
+    </div>
     <div class="hero-actions">
       <a href="#videos" class="btn btn-primary">Watch performances</a>
       <a href="#fees" class="btn btn-ghost">Check availability &amp; fees</a>
@@ -1667,6 +1693,48 @@
       setTimeout(() => piece.remove(), 4200);
     }
   }
+})();
+</script>
+<script>
+(function () {
+  const API_BASE = 'https://kushaagra-comments-api.onrender.com';
+  const liveBadge = document.getElementById('liveBadge');
+  const liveBadgeText = document.getElementById('liveBadgeText');
+
+  // A per-tab ID, kept for the life of this tab (survives refresh, not a new tab)
+  let visitorId = sessionStorage.getItem('kg_visitor_id');
+  if (!visitorId) {
+    visitorId = (crypto.randomUUID ? crypto.randomUUID() : 'v-' + Math.random().toString(36).slice(2));
+    sessionStorage.setItem('kg_visitor_id', visitorId);
+  }
+
+  function updateBadge(count) {
+    if (!count || count < 1) {
+      liveBadge.style.display = 'none';
+      return;
+    }
+    liveBadgeText.textContent = count === 1
+      ? '1 person viewing now'
+      : `${count} people viewing now`;
+    liveBadge.style.display = 'inline-flex';
+  }
+
+  async function sendHeartbeat() {
+    try {
+      const res = await fetch(`${API_BASE}/api/visitors/heartbeat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ visitorId }),
+      });
+      const data = await res.json();
+      updateBadge(data.count);
+    } catch (err) {
+      // Silent fail — the badge just stays hidden if the backend is asleep/unreachable
+    }
+  }
+
+  sendHeartbeat();
+  setInterval(sendHeartbeat, 10000);
 })();
 </script>
 </body>
