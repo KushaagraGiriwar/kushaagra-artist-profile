@@ -625,48 +625,7 @@
 @keyframes gm-fall {
   to { transform: translateY(110vh) rotate(540deg); opacity: 0.3; }
 }
-/* ---------- Performance Map ---------- */
-#perfmap {
-  height: 480px;
-  width: 100%;
-  border: 1px solid var(--line);
-  background: var(--ink-2);
-}
-.map-note {
-  font-size: 0.85rem;
-  color: var(--ivory-dim);
-  margin-top: 16px;
-}
-.pm-marker {
-  width: 14px;
-  height: 14px;
-  background: var(--brass);
-  border: 2px solid var(--ivory);
-  border-radius: 50%;
-  box-shadow: 0 0 0 4px rgba(201,162,39,0.25);
-  cursor: pointer;
-}
-/* Fake a dark map style on top of plain OpenStreetMap tiles (no API key needed) */
-#perfmap .leaflet-tile-pane {
-  filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.92) saturate(0.6);
-}
-.leaflet-tooltip.pm-tooltip {
-  background: var(--ink-2);
-  color: var(--ivory);
-  border: 1px solid var(--brass);
-  border-radius: 2px;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
-  padding: 6px 10px;
-}
-.leaflet-tooltip.pm-tooltip::before { border-top-color: var(--brass); }
-.leaflet-control-attribution {
-  background: rgba(20,22,27,0.75) !important;
-  color: var(--ivory-dim) !important;
-}
-.leaflet-control-attribution a { color: var(--brass) !important; }
 </style>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
 <body>
 
@@ -676,8 +635,7 @@
     <a href="#about">About</a>
     <a href="#videos">Videos</a>
     <a href="#gallery">Photos</a>
-<a href="#map">Map</a>
-    <a href="#fees">Booking</a>
+<a href="#fees">Booking</a>
     <a href="#comments">Testimonials</a>
     <a href="#contact">Contact</a>
   </div>
@@ -865,16 +823,6 @@
 </div>
 
 <!-- ================= FEES ================= -->
-<!-- ================= PERFORMANCE MAP ================= -->
-<section id="map">
-<div class="section-head">
-<h2>Where I've performed</h2>
-<span class="edit-hint">Colleges, clubs & cafes across Delhi NCR</span>
-</div>
-<div id="perfmap"></div>
-<p class="map-note">Map centered on Delhi NCR — 25 venues across colleges, clubs and cafes. Hover a pin to see the name, click it to open that location in Google Maps.</p>
-</section>
-
 <section id="fees" class="ambient" style="--glow-x:90%;--glow-y:10%;--glow-x2:10%;--glow-y2:90%;">
   <div class="section-head">
     <h2 class="reveal">Booking &amp; fees</h2>
@@ -1682,69 +1630,6 @@
       setTimeout(() => piece.remove(), 4200);
     }
   }
-})();
-</script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script>
-(function () {
-  const venues = [
-    { lat: 28.7500, lng: 77.1170, name: "DTU", query: "Delhi Technological University, Delhi" },
-    { lat: 28.6929, lng: 77.2102, name: "Miranda House", query: "Miranda House, Delhi University" },
-    { lat: 28.6548, lng: 77.1258, name: "Rajdhani College", query: "Rajdhani College, Delhi University" },
-    { lat: 28.5350, lng: 77.2590, name: "ANDC", query: "Acharya Narendra Dev College, Kalkaji, Delhi" },
-    { lat: 28.6795, lng: 77.2225, name: "Social — Civil Lines", query: "Social, Civil Lines, Delhi" },
-    { lat: 28.6467, lng: 77.1225, name: "Social — Rajouri Garden", query: "Social, Rajouri Garden, Delhi" },
-    { lat: 28.5610, lng: 77.2065, name: "ThePianoMan Jazz Club", query: "ThePianoMan Jazz Club, Safdarjung Enclave, Delhi" },
-    { lat: 28.6315, lng: 77.2167, name: "Dr. Zombie", query: "Dr. Zombie, Connaught Place, Delhi" },
-    { lat: 28.6219, lng: 77.0878, name: "Sky Rozo", query: "Sky Rozo, Janakpuri, Delhi" },
-
-    { lat: 28.6742, lng: 77.1313, name: "Third Wave Coffee", query: "Third Wave Coffee, Punjabi Bagh, Delhi" },
-    { lat: 28.6772, lng: 77.1333, name: "TEO", query: "TEO, Punjabi Bagh, Delhi" },
-    { lat: 28.6712, lng: 77.1333, name: "Verandah", query: "Verandah, Punjabi Bagh, Delhi" },
-    { lat: 28.6772, lng: 77.1293, name: "Raftaar", query: "Raftaar, Punjabi Bagh, Delhi" },
-    { lat: 28.6712, lng: 77.1293, name: "Infinity", query: "Infinity, Punjabi Bagh, Delhi" },
-    { lat: 28.6782, lng: 77.1313, name: "Air", query: "Air, Punjabi Bagh, Delhi" },
-    { lat: 28.6702, lng: 77.1313, name: "Boussac", query: "Boussac, Punjabi Bagh, Delhi" },
-    { lat: 28.6792, lng: 77.1313, name: "Breath", query: "Breath, Punjabi Bagh, Delhi" },
-    { lat: 28.6692, lng: 77.1313, name: "The Vaccine", query: "The Vaccine, Punjabi Bagh, Delhi" },
-
-    { lat: 28.7041, lng: 77.2088, name: "Rascal", query: "Rascal, Hudson Lane, GTB Nagar, Delhi" },
-    { lat: 28.7071, lng: 77.2108, name: "Houseful", query: "Houseful, Hudson Lane, GTB Nagar, Delhi" },
-    { lat: 28.7011, lng: 77.2108, name: "Urban Jungle", query: "Urban Jungle, Hudson Lane, GTB Nagar, Delhi" },
-
-    { lat: 28.5921, lng: 77.0460, name: "Cafe Uncover", query: "Cafe Uncover, Dwarka, Delhi" },
-    { lat: 28.5961, lng: 77.0490, name: "Omaxe Mall", query: "Omaxe Mall, Dwarka, Delhi" },
-
-    { lat: 28.5535, lng: 77.1892, name: "Downtown", query: "Downtown, Hauz Khas Village, Delhi" },
-    { lat: 28.5565, lng: 77.1912, name: "Epic Cafe", query: "Epic Cafe, Hauz Khas Village, Delhi" },
-  ];
-
-  const map = L.map('perfmap', {
-    scrollWheelZoom: false,
-  }).setView([28.635, 77.170], 11);
-
-  // Plain OpenStreetMap tiles — free, no API key or signup required.
-  // A CSS filter (see <style>) fakes a dark theme on top of them.
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 19,
-  }).addTo(map);
-
-  const pmIcon = L.divIcon({
-    className: '',
-    html: '<div class="pm-marker"></div>',
-    iconSize: [14, 14],
-    iconAnchor: [7, 7],
-  });
-
-  venues.forEach((v) => {
-    const marker = L.marker([v.lat, v.lng], { icon: pmIcon }).addTo(map);
-    marker.bindTooltip(v.name, { className: 'pm-tooltip', direction: 'top', offset: [0, -8] });
-    marker.on('click', () => {
-      const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v.query);
-      window.open(mapsUrl, '_blank', 'noopener');
-    });
-  });
 })();
 </script>
 </body>
