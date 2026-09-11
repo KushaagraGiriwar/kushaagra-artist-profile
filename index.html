@@ -77,12 +77,23 @@
     align-items:flex-end;
     padding:0 6% 90px;
     position:relative;
+    overflow:hidden;
+    background:var(--ink);
+  }
+  .hero-slideshow{position:absolute;inset:0;z-index:0;}
+  .hero-slideshow img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    opacity:0;transition:opacity 1.8s ease;
+  }
+  .hero-slideshow img.active{opacity:1;}
+  .hero-overlay{
+    position:absolute;inset:0;z-index:1;
     background:
       radial-gradient(ellipse 60% 50% at 80% 20%, rgba(122,35,49,0.35), transparent 70%),
       radial-gradient(ellipse 50% 40% at 10% 90%, rgba(201,162,39,0.12), transparent 70%),
-      var(--ink);
+      linear-gradient(to bottom, rgba(20,22,27,0.45) 0%, rgba(20,22,27,0.55) 40%, rgba(20,22,27,0.92) 100%);
   }
-  .hero-inner{max-width:900px;}
+  .hero-inner{max-width:900px;position:relative;z-index:2;}
   .hero-kicker{
     font-size:0.95rem;
     color:var(--brass);
@@ -122,6 +133,7 @@
     position:absolute;bottom:36px;left:6%;
     font-size:0.78rem;color:var(--ivory-dim);
     display:flex;align-items:center;gap:10px;
+    z-index:2;
   }
   .scroll-cue .line{width:1px;height:36px;background:var(--line);position:relative;overflow:hidden;}
   .scroll-cue .line::after{
@@ -444,6 +456,8 @@
 
 <!-- ================= HERO ================= -->
 <header class="hero">
+  <div class="hero-slideshow" id="heroSlideshow"></div>
+  <div class="hero-overlay"></div>
   <div class="hero-inner">
     <div class="hero-kicker">Bollywood &amp; Semi-Classical Vocalist</div>
     <h1>Kushaagra<br>Giriwar</h1>
@@ -864,9 +878,32 @@
       const res = await fetch(`${COMMENTS_API_BASE}/api/photos`);
       galleryPhotos = await res.json();
       renderGallery();
+      initHeroSlideshow(galleryPhotos);
     } catch (err) {
       galleryGrid.innerHTML = '<div class="comment-empty">Could not load photos right now.</div>';
     }
+  }
+
+  // ---------- Hero background slideshow ----------
+  let heroSlideIdx = 0;
+  let heroSlideTimer = null;
+  function initHeroSlideshow(photos){
+    const container = document.getElementById('heroSlideshow');
+    if (!photos || photos.length === 0) return;
+    if (heroSlideTimer) clearInterval(heroSlideTimer);
+    // Use up to 8 photos so the hero doesn't loop through every single one.
+    const slides = photos.slice(0, 8);
+    container.innerHTML = slides.map((p, i) =>
+      `<img src="${p.url}" alt="${(p.alt || '').replace(/"/g,'&quot;')}" class="${i === 0 ? 'active' : ''}">`
+    ).join('');
+    if (slides.length <= 1) return;
+    heroSlideIdx = 0;
+    heroSlideTimer = setInterval(() => {
+      const imgs = container.querySelectorAll('img');
+      imgs[heroSlideIdx].classList.remove('active');
+      heroSlideIdx = (heroSlideIdx + 1) % imgs.length;
+      imgs[heroSlideIdx].classList.add('active');
+    }, 5000);
   }
 
   // ---------- Admin login + add-photo ----------
