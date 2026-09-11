@@ -869,7 +869,10 @@
   }
 
   document.querySelectorAll('.video-thumb').forEach(thumb => {
-    thumb.addEventListener('click', () => playInlineThumb(thumb));
+    thumb.addEventListener('click', () => {
+      const card = thumb.closest('.video-card');
+      openVideoLightbox(card.dataset.panel, parseInt(card.dataset.vidx, 10));
+    });
   });
   document.querySelectorAll('.video-expand-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
