@@ -515,6 +515,116 @@
   .wa-float { bottom: 18px; right: 18px; width: 52px; height: 52px; }
   .wa-float svg { width: 26px; height: 26px; }
 }
+/* ---------- Golden Mic Easter Egg ---------- */
+.gm-float {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  width: 54px;
+  height: 54px;
+  background: var(--ink-2);
+  border: 1.5px solid var(--brass);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+  z-index: 500;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.6);
+  pointer-events: none;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.gm-float.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
+.gm-float svg { width: 24px; height: 24px; fill: var(--brass); }
+.gm-float::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--brass);
+  opacity: 0.35;
+  animation: gm-pulse 2.6s ease-out infinite;
+  z-index: -1;
+}
+@keyframes gm-pulse {
+  0%   { transform: scale(1);   opacity: 0.35; }
+  70%  { transform: scale(1.9); opacity: 0; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+.gm-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(10,11,14,0.88);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 900;
+  padding: 24px;
+}
+.gm-modal-overlay.open { display: flex; }
+.gm-modal {
+  background: var(--ink-2);
+  border: 1px solid var(--brass);
+  max-width: 440px;
+  width: 100%;
+  padding: 40px 32px;
+  text-align: center;
+  position: relative;
+}
+.gm-modal h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: var(--ivory);
+}
+.gm-modal p.gm-sub {
+  color: var(--ivory-dim);
+  font-size: 0.92rem;
+  margin-bottom: 26px;
+}
+.gm-choice-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.gm-choice-btn {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ivory);
+  padding: 14px 18px;
+  font-size: 0.98rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+.gm-choice-btn:hover { border-color: var(--brass); background: rgba(201,162,39,0.08); }
+.gm-close {
+  position: absolute; top: 14px; right: 16px;
+  background: none; border: none; color: var(--ivory-dim);
+  font-size: 1.4rem; cursor: pointer; line-height: 1;
+}
+.gm-reveal { display: none; }
+.gm-reveal.active { display: block; }
+.gm-trophy { font-size: 2.6rem; margin-bottom: 14px; }
+.gm-modal h3.gm-toast-title {
+  color: var(--brass);
+}
+.gm-audio-note {
+  font-size: 0.82rem;
+  color: var(--ivory-dim);
+  margin-top: 18px;
+}
+/* Confetti */
+.gm-confetti-piece {
+  position: fixed;
+  top: -20px;
+  width: 8px; height: 14px;
+  z-index: 950;
+  pointer-events: none;
+  animation: gm-fall linear forwards;
+}
+@keyframes gm-fall {
+  to { transform: translateY(110vh) rotate(540deg); opacity: 0.3; }
+}
 </style>
 </head>
 <body>
@@ -1389,6 +1499,35 @@
 })();
 </script>
 
+<!-- ================= GOLDEN MIC EASTER EGG ================= -->
+<button class="gm-float" id="gmFloat" aria-label="???">
+  <svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg>
+</button>
+
+<div class="gm-modal-overlay" id="gmOverlay">
+  <div class="gm-modal">
+    <button class="gm-close" id="gmClose" aria-label="Close">&times;</button>
+
+    <div class="gm-reveal active" id="gmStepChoose">
+      <h3>You found something.</h3>
+      <p class="gm-sub">Which type of songs do you like?</p>
+      <div class="gm-choice-row">
+        <button class="gm-choice-btn" data-mood="sad">Sad</button>
+        <button class="gm-choice-btn" data-mood="romantic">Romantic</button>
+        <button class="gm-choice-btn" data-mood="retro">Old Retro</button>
+      </div>
+    </div>
+
+    <div class="gm-reveal" id="gmStepReveal">
+      <div class="gm-trophy">🏆</div>
+      <h3 class="gm-toast-title">Achievement Unlocked</h3>
+      <p class="gm-sub" id="gmRevealText">A little something, just for you.</p>
+      <audio id="gmAudio" controls style="width:100%;"></audio>
+      <p class="gm-audio-note">You've got a good ear for hidden things.</p>
+    </div>
+  </div>
+</div>
+
 <a
   class="wa-float"
   href="https://wa.me/918851978627?text=Hi%20Kushaagra!%20I%20found%20your%20website%20and%20wanted%20to%20know%20more%20about%20booking%20you%20for%20an%20event."
@@ -1398,5 +1537,100 @@
 >
   <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.44 1.32 4.94L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2zm0 18.06h-.01a8.13 8.13 0 0 1-4.15-1.14l-.3-.18-3.14.82.84-3.06-.19-.31a8.15 8.15 0 0 1-1.25-4.33c0-4.51 3.68-8.18 8.2-8.18 2.19 0 4.25.85 5.79 2.4a8.13 8.13 0 0 1 2.4 5.79c0 4.51-3.68 8.19-8.19 8.19zm4.49-6.13c-.25-.12-1.46-.72-1.68-.8-.23-.08-.39-.12-.56.12-.16.25-.64.8-.78.96-.15.16-.29.18-.53.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42h-.48c-.16 0-.43.06-.65.31-.23.25-.85.83-.85 2.02s.87 2.35.99 2.51c.12.16 1.71 2.6 4.14 3.65.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.09.47-.07 1.46-.6 1.66-1.17.21-.58.21-1.08.15-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
 </a>
+<script>
+(function () {
+  const gmFloat = document.getElementById('gmFloat');
+  const gmOverlay = document.getElementById('gmOverlay');
+  const gmClose = document.getElementById('gmClose');
+  const gmStepChoose = document.getElementById('gmStepChoose');
+  const gmStepReveal = document.getElementById('gmStepReveal');
+  const gmAudio = document.getElementById('gmAudio');
+  const gmRevealText = document.getElementById('gmRevealText');
+
+  // ---- Trigger: reveal the mic after real engagement ----
+  // Whichever happens first: visitor scrolls to Contact, OR 40 seconds pass.
+  let revealed = false;
+  function revealMic() {
+    if (revealed) return;
+    revealed = true;
+    gmFloat.classList.add('visible');
+  }
+  setTimeout(revealMic, 40000);
+
+  const contactSection = document.getElementById('contact');
+  if (contactSection && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) revealMic();
+      });
+    }, { threshold: 0.3 });
+    observer.observe(contactSection);
+  }
+
+  // ---- Open / close modal ----
+  gmFloat.addEventListener('click', () => {
+    gmOverlay.classList.add('open');
+    gmStepChoose.classList.add('active');
+    gmStepReveal.classList.remove('active');
+    gmAudio.pause();
+  });
+
+  function closeModal() {
+    gmOverlay.classList.remove('open');
+    gmAudio.pause();
+  }
+  gmClose.addEventListener('click', closeModal);
+  gmOverlay.addEventListener('click', (e) => {
+    if (e.target === gmOverlay) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && gmOverlay.classList.contains('open')) closeModal();
+  });
+
+  // ---- Mood choice → reveal + play + confetti ----
+  // ⚠️ Upload these 3 files to the repo root with these exact names:
+  // secret-sad.mp3, secret-romantic.mp3, secret-retro.mp3
+  const moodConfig = {
+    sad: { file: 'secret-sad.mp3', text: 'A quiet one, just for you.' },
+    romantic: { file: 'secret-romantic.mp3', text: 'For the hopeless romantics.' },
+    retro: { file: 'secret-retro.mp3', text: 'An old favorite, brought back.' },
+  };
+
+  document.querySelectorAll('.gm-choice-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const mood = btn.dataset.mood;
+      const config = moodConfig[mood];
+      gmAudio.src = config.file;
+      gmRevealText.textContent = config.text;
+
+      gmStepChoose.classList.remove('active');
+      gmStepReveal.classList.add('active');
+
+      gmAudio.play().catch(() => {
+        // Autoplay might be blocked on some mobile browsers — the visible
+        // <audio> controls let them press play manually as a fallback.
+      });
+
+      fireConfetti();
+    });
+  });
+
+  // ---- Lightweight confetti burst (no external library) ----
+  function fireConfetti() {
+    const colors = ['#c9a227', '#f2efe9', '#7a2331', '#e8c468'];
+    const pieceCount = 60;
+    for (let i = 0; i < pieceCount; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'gm-confetti-piece';
+      piece.style.left = Math.random() * 100 + 'vw';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDuration = 2.5 + Math.random() * 1.5 + 's';
+      piece.style.opacity = 0.7 + Math.random() * 0.3;
+      document.body.appendChild(piece);
+      setTimeout(() => piece.remove(), 4200);
+    }
+  }
+})();
+</script>
 </body>
 </html>
