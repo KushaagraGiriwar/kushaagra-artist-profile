@@ -4,21 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kushaagra Giriwar — Bollywood & Semi-Classical Vocalist</title>
-
-<meta name="description" content="Kushaagra Giriwar — Bollywood & semi-classical vocalist in Delhi NCR. Solo, duo & band performances for weddings, fests, corporate & private events.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Kushaagra Giriwar — Bollywood & Semi-Classical Vocalist">
-<meta property="og:description" content="Bollywood & semi-classical vocalist for weddings, college fests, corporate events & private shows — solo, duo or full band.">
-<meta property="og:image" content="https://kushaagragiriwar.github.io/kushaagra-artist-profile/og-image.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:url" content="https://kushaagragiriwar.github.io/kushaagra-artist-profile/">
-<meta property="og:site_name" content="Kushaagra Giriwar">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Kushaagra Giriwar — Bollywood & Semi-Classical Vocalist">
-<meta name="twitter:description" content="Bollywood & semi-classical vocalist for weddings, college fests, corporate events & private shows — solo, duo or full band.">
-<meta name="twitter:image" content="https://kushaagragiriwar.github.io/kushaagra-artist-profile/og-image.jpg">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -248,6 +233,13 @@
     cursor:pointer;transition:all .2s;margin-top:2px;
   }
   .video-expand-btn:hover{background:var(--brass);border-color:var(--brass);color:var(--ink);}
+  .video-delete-btn{
+    flex-shrink:0;width:32px;height:32px;border-radius:50%;
+    border:1px solid var(--wine);background:transparent;color:var(--ivory-dim);
+    display:flex;align-items:center;justify-content:center;font-size:1rem;
+    cursor:pointer;transition:all .2s;margin-top:2px;
+  }
+  .video-delete-btn:hover{background:var(--wine);color:var(--ivory);}
 
   /* ---------- Video lightbox ---------- */
   .video-lightbox{
@@ -302,33 +294,6 @@
   }
   .admin-add-photo #adminAddPhotoStatus{font-size:0.82rem;color:var(--ivory-dim);width:100%;}
   .g-item{position:relative;}
-  .gallery-show-more-btn{
-    display:block;
-    margin:26px auto 0;
-    padding:12px 30px;
-  }
-  .live-badge{
-    display:inline-flex;
-    align-items:center;
-    gap:9px;
-    font-size:0.85rem;
-    color:var(--ivory-dim);
-    margin-bottom:22px;
-    padding:7px 14px;
-    border:1px solid var(--line);
-    border-radius:30px;
-  }
-  .live-dot{
-    width:8px;height:8px;
-    border-radius:50%;
-    background:#ff5555;
-    flex-shrink:0;
-    animation:live-pulse 1.8s ease-in-out infinite;
-  }
-  @keyframes live-pulse{
-    0%,100%{opacity:1;transform:scale(1);}
-    50%{opacity:0.5;transform:scale(0.8);}
-  }
   .g-item .g-delete-btn{
     position:absolute;top:8px;right:8px;z-index:3;
     width:30px;height:30px;border-radius:50%;
@@ -407,6 +372,36 @@
   .fee-card ul{list-style:none;margin-top:22px;font-size:0.9rem;color:var(--ivory-dim);}
   .fee-card li{padding:8px 0;border-bottom:1px solid var(--line);}
   .fee-note{margin-top:26px;font-size:0.88rem;color:var(--ivory-dim);}
+
+  /* ---------- Availability calendar ---------- */
+  .calendar-wrap{display:grid;grid-template-columns:1fr 1fr;gap:50px;}
+  .calendar-month h3{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:16px;font-weight:600;}
+  .calendar-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px;}
+  .calendar-weekdays span{text-align:center;font-size:0.72rem;color:var(--ivory-dim);text-transform:uppercase;letter-spacing:0.04em;}
+  .calendar-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+  .calendar-day{
+    aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+    font-size:0.85rem;color:var(--ivory-dim);border:1px solid var(--line);
+  }
+  .calendar-day.empty{border:none;}
+  .calendar-day.today{border-color:var(--brass);color:var(--brass);font-weight:600;}
+  .calendar-day.booked{background:var(--wine);color:var(--ivory);border-color:var(--wine);font-weight:600;}
+  .calendar-legend{display:flex;gap:18px;margin-top:20px;font-size:0.82rem;color:var(--ivory-dim);}
+  .calendar-legend span{display:inline-flex;align-items:center;gap:8px;}
+  .calendar-legend .swatch{width:14px;height:14px;display:inline-block;border:1px solid var(--line);}
+  .calendar-legend .swatch.booked{background:var(--wine);border-color:var(--wine);}
+  .booked-date-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:10px 0;border-bottom:1px solid var(--line);font-size:0.88rem;color:var(--ivory-dim);
+  }
+  .booked-date-row button{
+    background:transparent;border:1px solid var(--wine);color:var(--ivory);
+    width:26px;height:26px;border-radius:50%;cursor:pointer;transition:all .2s;
+  }
+  .booked-date-row button:hover{background:var(--wine);}
+  @media(max-width:700px){
+    .calendar-wrap{grid-template-columns:1fr;}
+  }
 
   /* ---------- Testimonials ---------- */
   .testimonial-row{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;}
@@ -506,152 +501,6 @@
     .gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:140px;}
     .gallery .g-item:nth-child(1){grid-column:span 2;}
   }
-.wa-float {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 58px;
-  height: 58px;
-  background: #25D366;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.35);
-  z-index: 500;
-  transition: transform 0.2s ease;
-}
-.wa-float:hover { transform: scale(1.08); }
-.wa-float svg { width: 30px; height: 30px; fill: #ffffff; }
-.wa-float::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: #25D366;
-  opacity: 0.5;
-  animation: wa-pulse 2.4s ease-out infinite;
-  z-index: -1;
-}
-@keyframes wa-pulse {
-  0%   { transform: scale(1);   opacity: 0.5; }
-  70%  { transform: scale(1.9); opacity: 0; }
-  100% { transform: scale(1.9); opacity: 0; }
-}
-@media (max-width: 700px) {
-  .wa-float { bottom: 18px; right: 18px; width: 52px; height: 52px; }
-  .wa-float svg { width: 26px; height: 26px; }
-}
-/* ---------- Golden Mic Easter Egg ---------- */
-.gm-float {
-  position: fixed;
-  bottom: 24px;
-  left: 24px;
-  width: 54px;
-  height: 54px;
-  background: var(--ink-2);
-  border: 1.5px solid var(--brass);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.4);
-  z-index: 500;
-  cursor: pointer;
-  opacity: 0;
-  transform: scale(0.6);
-  pointer-events: none;
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-.gm-float.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
-.gm-float svg { width: 24px; height: 24px; fill: var(--brass); }
-.gm-float::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: var(--brass);
-  opacity: 0.35;
-  animation: gm-pulse 2.6s ease-out infinite;
-  z-index: -1;
-}
-@keyframes gm-pulse {
-  0%   { transform: scale(1);   opacity: 0.35; }
-  70%  { transform: scale(1.9); opacity: 0; }
-  100% { transform: scale(1.9); opacity: 0; }
-}
-.gm-modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(10,11,14,0.88);
-  display: none;
-  align-items: center; justify-content: center;
-  z-index: 900;
-  padding: 24px;
-}
-.gm-modal-overlay.open { display: flex; }
-.gm-modal {
-  background: var(--ink-2);
-  border: 1px solid var(--brass);
-  max-width: 440px;
-  width: 100%;
-  padding: 40px 32px;
-  text-align: center;
-  position: relative;
-}
-.gm-modal h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: var(--ivory);
-}
-.gm-modal p.gm-sub {
-  color: var(--ivory-dim);
-  font-size: 0.92rem;
-  margin-bottom: 26px;
-}
-.gm-choice-row {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.gm-choice-btn {
-  background: transparent;
-  border: 1px solid var(--line);
-  color: var(--ivory);
-  padding: 14px 18px;
-  font-size: 0.98rem;
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
-  font-family: 'Inter', sans-serif;
-}
-.gm-choice-btn:hover { border-color: var(--brass); background: rgba(201,162,39,0.08); }
-.gm-close {
-  position: absolute; top: 14px; right: 16px;
-  background: none; border: none; color: var(--ivory-dim);
-  font-size: 1.4rem; cursor: pointer; line-height: 1;
-}
-.gm-reveal { display: none; }
-.gm-reveal.active { display: block; }
-.gm-trophy { font-size: 2.6rem; margin-bottom: 14px; }
-.gm-modal h3.gm-toast-title {
-  color: var(--brass);
-}
-.gm-audio-note {
-  font-size: 0.82rem;
-  color: var(--ivory-dim);
-  margin-top: 18px;
-}
-/* Confetti */
-.gm-confetti-piece {
-  position: fixed;
-  top: -20px;
-  width: 8px; height: 14px;
-  z-index: 950;
-  pointer-events: none;
-  animation: gm-fall linear forwards;
-}
-@keyframes gm-fall {
-  to { transform: translateY(110vh) rotate(540deg); opacity: 0.3; }
-}
 </style>
 </head>
 <body>
@@ -662,7 +511,8 @@
     <a href="#about">About</a>
     <a href="#videos">Videos</a>
     <a href="#gallery">Photos</a>
-<a href="#fees">Booking</a>
+    <a href="#fees">Booking</a>
+    <a href="#availability">Availability</a>
     <a href="#comments">Testimonials</a>
     <a href="#contact">Contact</a>
   </div>
@@ -676,10 +526,6 @@
     <div class="hero-kicker">Bollywood &amp; Semi-Classical Vocalist</div>
     <h1>Kushaagra<br>Giriwar</h1>
     <p class="tag">Solo sets, intimate duo shows, or a full live band — Bollywood and semi-classical music built for weddings, college fests, corporate events and private nights that need to be remembered.</p>
-    <div class="live-badge" id="liveBadge" style="display:none;">
-      <span class="live-dot"></span>
-      <span id="liveBadgeText">— people viewing now</span>
-    </div>
     <div class="hero-actions">
       <a href="#videos" class="btn btn-primary">Watch performances</a>
       <a href="#fees" class="btn btn-ghost">Check availability &amp; fees</a>
@@ -698,9 +544,14 @@
       <img src="https://drive.google.com/thumbnail?id=1PesN_J9r6QSmVPsRLNOTVknUgXMzQEGN&sz=w900" alt="Kushaagra Giriwar performing" loading="lazy">
     </div>
     <div>
-      <span class="edit-hint">EDIT: full bio coming soon — placeholder below</span>
-      <p>Kushaagra Giriwar is a Bollywood and semi-classical vocalist based in the Delhi NCR region, performing solo, duo and full-band sets across weddings, college fests and private events. Notable performances include Pianoman (TPM) and multiple college fest stages.</p>
-      <p>[Full bio to be added — journey, influences, and what makes your live sets stand out.]</p>
+      <p id="bioPara1">Kushaagra Giriwar is a Bollywood and semi-classical vocalist based in the Delhi NCR region, performing solo, duo and full-band sets across weddings, college fests and private events. Notable performances include Pianoman (TPM) and multiple college fest stages.</p>
+      <p id="bioPara2">[Full bio to be added — journey, influences, and what makes your live sets stand out.]</p>
+      <div id="adminEditBioBox" class="admin-add-photo" style="display:none;flex-direction:column;align-items:stretch;">
+        <textarea id="adminBioPara1Input" placeholder="First bio paragraph" style="min-height:80px;resize:vertical;"></textarea>
+        <textarea id="adminBioPara2Input" placeholder="Second bio paragraph" style="min-height:80px;resize:vertical;"></textarea>
+        <button class="btn btn-primary" id="adminSaveBioBtn" style="width:auto;align-self:flex-start;">Save bio</button>
+        <span id="adminSaveBioStatus"></span>
+      </div>
     </div>
     <div class="facts">
       <div class="fact"><span>Genre</span><span>Bollywood, Semi-classical</span></div>
@@ -726,86 +577,17 @@
     <button class="tab" data-tab="band">Band</button>
   </div>
 
-  <div class="video-panel active" id="solo">
-    <div class="video-card" data-vidx="0" data-panel="solo" data-src="https://drive.google.com/file/d/1KbKGiDIx1dN0Qx34uIpK5eJPkXZ-jNQB/preview" data-title="ThePianoMan (TPM)" data-venue="Safdarjang">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1KbKGiDIx1dN0Qx34uIpK5eJPkXZ-jNQB&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>ThePianoMan (TPM)</h3><p>Safdarjang</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="1" data-panel="solo" data-src="https://drive.google.com/file/d/17-Kq4uuI2NT5XQwrxSE5kyAkI1TjJliW/preview" data-title="Saiyaara" data-venue="@ DTU">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=17-Kq4uuI2NT5XQwrxSE5kyAkI1TjJliW&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Saiyaara</h3><p>@ DTU</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="2" data-panel="solo" data-src="https://drive.google.com/file/d/1zSn32FVcwqmvP1MT451zJePR5bkicsTY/preview" data-title="Dancing Numbers" data-venue="@ Breath">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1zSn32FVcwqmvP1MT451zJePR5bkicsTY&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Dancing Numbers</h3><p>@ Breath</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="3" data-panel="solo" data-src="https://drive.google.com/file/d/1BIsMvRv0ZGJBf2bft4dLW5vD1B3CPwWH/preview" data-title="Khamoshiyan" data-venue="@ Social, Civil Lines">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1BIsMvRv0ZGJBf2bft4dLW5vD1B3CPwWH&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Khamoshiyan</h3><p>@ Social, Civil Lines</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="4" data-panel="solo" data-src="https://drive.google.com/file/d/1Lc6ku2zLyBrTBuFd81kRg_xXzAtW0oKZ/preview" data-title="Kaise Hua" data-venue="@ CVS">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1Lc6ku2zLyBrTBuFd81kRg_xXzAtW0oKZ&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Kaise Hua</h3><p>@ CVS</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="5" data-panel="solo" data-src="https://drive.google.com/file/d/1rsXGdek_YjhLWAnn1yH4DUcNY3DMV9gr/preview" data-title="Retro Mashup" data-venue="@ FLOS">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1rsXGdek_YjhLWAnn1yH4DUcNY3DMV9gr&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Retro Mashup</h3><p>@ FLOS</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
+  <div id="adminAddVideoBox" class="admin-add-photo" style="display:none;">
+    <input type="text" id="adminVideoUrlInput" placeholder="Paste a Google Drive video link or file ID">
+    <input type="text" id="adminVideoTitleInput" placeholder="Title">
+    <input type="text" id="adminVideoVenueInput" placeholder="Venue (optional)">
+    <button class="btn btn-primary" id="adminAddVideoBtn">Add to current tab</button>
+    <span id="adminAddVideoStatus"></span>
   </div>
 
-  <div class="video-panel" id="duo">
-    <div class="video-card" data-vidx="0" data-panel="duo" data-src="https://drive.google.com/file/d/17rvMxsr93D-lo15WL6pHoj1mvE7SkqcU/preview" data-title="Ye Tune Kya Kiya" data-venue="@ Rajdhani College">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=17rvMxsr93D-lo15WL6pHoj1mvE7SkqcU&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Ye Tune Kya Kiya</h3><p>@ Rajdhani College</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="1" data-panel="duo" data-src="https://drive.google.com/file/d/1-TVTjlxA0THgGe0hXRpgM2FM3kKNbnJh/preview" data-title="O O Jaane Jaana" data-venue="@ Social">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1-TVTjlxA0THgGe0hXRpgM2FM3kKNbnJh&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>O O Jaane Jaana</h3><p>@ Social</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="2" data-panel="duo" data-src="https://drive.google.com/file/d/12OYTr4QCdkrKAoz2h4p1k1oSkwTlCu4g/preview" data-title="Pehli Nazar Mein" data-venue="@ Miranda House">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=12OYTr4QCdkrKAoz2h4p1k1oSkwTlCu4g&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Pehli Nazar Mein</h3><p>@ Miranda House</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="3" data-panel="duo" data-src="https://drive.google.com/file/d/1W6jUl0k6v35twLGKUR8V5QyOo6BrlVZ_/preview" data-title="Chura Liya Hai Tumne Jo Dil Ko" data-venue="@ Miranda House">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1W6jUl0k6v35twLGKUR8V5QyOo6BrlVZ_&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Chura Liya Hai Tumne Jo Dil Ko</h3><p>@ Miranda House</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="4" data-panel="duo" data-src="https://drive.google.com/file/d/1bzktVhWWuoF5FYFk3k3Pz8IAQgrblKQz/preview" data-title="Ajeeb Dastan" data-venue="@ Mazi Cafe">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1bzktVhWWuoF5FYFk3k3Pz8IAQgrblKQz&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Ajeeb Dastan</h3><p>@ Mazi Cafe</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="5" data-panel="duo" data-src="https://drive.google.com/file/d/1Wv9CzikuCdVezXZqA0hDA21cJH5e2QKQ/preview" data-title="Sahiba" data-venue="Duo performance">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1Wv9CzikuCdVezXZqA0hDA21cJH5e2QKQ&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Sahiba</h3><p>Duo performance</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-  </div>
-
-  <div class="video-panel" id="band">
-    <div class="video-card" data-vidx="0" data-panel="band" data-src="https://drive.google.com/file/d/1q8zeNlI2udxMOenvhGZXV2WeEuEZLzIg/preview" data-title="Khuda Jaane" data-venue="Full band, live">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1q8zeNlI2udxMOenvhGZXV2WeEuEZLzIg&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Khuda Jaane</h3><p>Full band, live</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="1" data-panel="band" data-src="https://drive.google.com/file/d/1Di5dQEhMygiwkM4uH08nChrHEPRrd-IF/preview" data-title="Zara Sa" data-venue="Full band, live">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1Di5dQEhMygiwkM4uH08nChrHEPRrd-IF&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Zara Sa</h3><p>Full band, live</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="2" data-panel="band" data-src="https://drive.google.com/file/d/1lQS9Migu11L7lPJdjoX4D3eyas63gCvw/preview" data-title="Ae Dil Hai Mushkil" data-venue="Full band, live">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1lQS9Migu11L7lPJdjoX4D3eyas63gCvw&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Ae Dil Hai Mushkil</h3><p>Full band, live</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="3" data-panel="band" data-src="https://drive.google.com/file/d/1_aZk2Vka5CG3Lt9HiCQ9uIT4nt5S0j-l/preview" data-title="Yeh Fitoor Mera" data-venue="Full band, live">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1_aZk2Vka5CG3Lt9HiCQ9uIT4nt5S0j-l&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Yeh Fitoor Mera</h3><p>Full band, live</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="4" data-panel="band" data-src="https://drive.google.com/file/d/1ntExhAMFSj6bASEhc0PaKvm94Zlriomf/preview" data-title="Jo Bheji Thi Dua" data-venue="Full band, live">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1ntExhAMFSj6bASEhc0PaKvm94Zlriomf&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Jo Bheji Thi Dua</h3><p>Full band, live</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-    <div class="video-card" data-vidx="5" data-panel="band" data-src="https://drive.google.com/file/d/1P-fnJPFzjsHI5UNzPWblwwiL_xuBQf_4/preview" data-title="Ud-da Punjab" data-venue="Full band, live">
-      <div class="video-thumb" data-loaded="false" style="background-image:url('https://drive.google.com/thumbnail?id=1P-fnJPFzjsHI5UNzPWblwwiL_xuBQf_4&sz=w800');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
-      <div class="video-info"><div><h3>Ud-da Punjab</h3><p>Full band, live</p></div><button class="video-expand-btn" aria-label="Expand video">&#x2922;</button></div>
-    </div>
-  </div>
+  <div class="video-panel active" id="solo"><div class="comment-loading">Loading videos…</div></div>
+  <div class="video-panel" id="duo"><div class="comment-loading">Loading videos…</div></div>
+  <div class="video-panel" id="band"><div class="comment-loading">Loading videos…</div></div>
 </section>
 
 <!-- ================= GALLERY ================= -->
@@ -862,7 +644,7 @@
   <div class="fee-grid">
     <div class="fee-card">
       <h3>Solo</h3>
-      <div class="price">₹XX,XXX <small>/ event</small></div>
+      <div class="price"><span id="feeSoloPrice">₹XX,XXX</span> <small>/ event</small></div>
       <p style="color:var(--ivory-dim);font-size:0.9rem;">Acoustic or backing-track set, ideal for intimate venues and smaller events.</p>
       <ul>
         <li>Up to 2 hours performance</li>
@@ -873,7 +655,7 @@
     <div class="fee-card featured">
       <span class="tag2">Most booked</span>
       <h3>Duo</h3>
-      <div class="price">₹XX,XXX <small>/ event</small></div>
+      <div class="price"><span id="feeDuoPrice">₹XX,XXX</span> <small>/ event</small></div>
       <p style="color:var(--ivory-dim);font-size:0.9rem;">Fuller sound with a second musician — most popular for weddings and private parties.</p>
       <ul>
         <li>Up to 2.5 hours performance</li>
@@ -883,7 +665,7 @@
     </div>
     <div class="fee-card">
       <h3>Band</h3>
-      <div class="price">₹XX,XXX <small>/ event</small></div>
+      <div class="price"><span id="feeBandPrice">₹XX,XXX</span> <small>/ event</small></div>
       <p style="color:var(--ivory-dim);font-size:0.9rem;">Full live band experience for festivals, large weddings and corporate stages.</p>
       <ul>
         <li>Full band (list size, e.g. 4–5 members)</li>
@@ -892,7 +674,39 @@
       </ul>
     </div>
   </div>
-  <p class="fee-note">Fees vary by location, event duration and travel. Get in touch for a custom quote — outstation and international bookings welcome.</p>
+  <p class="fee-note" id="feeNote">Fees vary by location, event duration and travel. Get in touch for a custom quote — outstation and international bookings welcome.</p>
+
+  <div id="adminEditFeesBox" class="admin-add-photo" style="display:none;flex-direction:column;align-items:stretch;">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <input type="text" id="adminFeeSoloInput" placeholder="Solo price, e.g. ₹15,000">
+      <input type="text" id="adminFeeDuoInput" placeholder="Duo price, e.g. ₹25,000">
+      <input type="text" id="adminFeeBandInput" placeholder="Band price, e.g. ₹50,000">
+    </div>
+    <textarea id="adminFeeNoteInput" placeholder="Fee note / disclaimer" style="min-height:60px;resize:vertical;"></textarea>
+    <button class="btn btn-primary" id="adminSaveFeesBtn" style="width:auto;align-self:flex-start;">Save fees</button>
+    <span id="adminSaveFeesStatus"></span>
+  </div>
+</section>
+
+<!-- ================= AVAILABILITY ================= -->
+<section id="availability" class="ambient" style="--glow-x:20%;--glow-y:90%;--glow-x2:80%;--glow-y2:10%;">
+  <div class="section-head">
+    <h2 class="reveal">Availability</h2>
+    <span class="edit-hint">Dates in gold are already booked</span>
+  </div>
+  <div class="calendar-wrap" id="calendarWrap">
+    <div class="comment-loading">Loading calendar…</div>
+  </div>
+
+  <div id="adminBookedDatesBox" class="admin-add-photo" style="display:none;flex-direction:column;align-items:stretch;margin-top:30px;">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <input type="date" id="adminBookedDateInput">
+      <input type="text" id="adminBookedNoteInput" placeholder="Note (optional, e.g. client/event name)">
+      <button class="btn btn-primary" id="adminAddBookedDateBtn">Mark as booked</button>
+    </div>
+    <span id="adminBookedDateStatus"></span>
+    <div id="adminBookedDatesList" style="margin-top:16px;"></div>
+  </div>
 </section>
 
 <!-- ================= COMMENTS (What people say) ================= -->
@@ -1021,12 +835,14 @@
 
   const tabs = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.video-panel');
+  let currentVideoTab = 'solo';
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
       panels.forEach(p => p.classList.remove('active'));
       tab.classList.add('active');
       document.getElementById(tab.dataset.tab).classList.add('active');
+      currentVideoTab = tab.dataset.tab;
     });
   });
 
@@ -1037,8 +853,6 @@
   const lbImg = document.getElementById('lbImg');
   const lbCount = document.getElementById('lbCount');
   let galleryPhotos = [];
-  let galleryShowAll = false;
-  const GALLERY_INITIAL_COUNT = 9; // roughly 2–3 rows given the grid's special item spans
   let currentIdx = 0;
 
   function openLightbox(idx){
@@ -1079,15 +893,9 @@
   function renderGallery(){
     if (galleryPhotos.length === 0) {
       galleryGrid.innerHTML = '<div class="comment-empty">No photos yet.</div>';
-      const existingBtn = document.getElementById('galleryShowMoreBtn');
-      if (existingBtn) existingBtn.remove();
       return;
     }
-    const visiblePhotos = galleryShowAll
-      ? galleryPhotos.map((photo, idx) => ({ photo, idx }))
-      : galleryPhotos.map((photo, idx) => ({ photo, idx })).slice(0, GALLERY_INITIAL_COUNT);
-
-    galleryGrid.innerHTML = visiblePhotos.map(({ photo, idx }) => `
+    galleryGrid.innerHTML = galleryPhotos.map((photo, idx) => `
       <div class="g-item">
         ${isAdminLoggedIn ? `
           <button class="g-feature-btn ${photo.featured ? 'featured' : ''}" data-photo-id="${photo.id}" data-featured="${photo.featured ? '1' : '0'}" aria-label="Feature on homepage" title="${photo.featured ? 'Featured on homepage — click to remove' : 'Click to feature on homepage slideshow'}">&#9733;</button>
@@ -1096,8 +904,8 @@
         <img src="${photo.url}" alt="${(photo.alt || '').replace(/"/g,'&quot;')}" loading="lazy" data-idx="${idx}" style="width:100%;height:100%;object-fit:cover;">
       </div>
     `).join('');
-    galleryGrid.querySelectorAll('img').forEach((img) => {
-      img.addEventListener('click', () => openLightbox(parseInt(img.dataset.idx, 10)));
+    galleryGrid.querySelectorAll('img').forEach((img, idx) => {
+      img.addEventListener('click', () => openLightbox(idx));
     });
     galleryGrid.querySelectorAll('.g-delete-btn').forEach(btn => {
       btn.addEventListener('click', async (e) => {
@@ -1130,30 +938,6 @@
         }
       });
     });
-
-    renderGalleryShowMoreButton();
-  }
-
-  function renderGalleryShowMoreButton(){
-    let btn = document.getElementById('galleryShowMoreBtn');
-    const hasMore = galleryPhotos.length > GALLERY_INITIAL_COUNT;
-
-    if (!hasMore) {
-      if (btn) btn.remove();
-      return;
-    }
-    if (!btn) {
-      btn = document.createElement('button');
-      btn.id = 'galleryShowMoreBtn';
-      btn.className = 'btn btn-ghost gallery-show-more-btn';
-      galleryGrid.insertAdjacentElement('afterend', btn);
-      btn.addEventListener('click', () => {
-        galleryShowAll = !galleryShowAll;
-        renderGallery();
-      });
-    }
-    const remaining = galleryPhotos.length - GALLERY_INITIAL_COUNT;
-    btn.textContent = galleryShowAll ? 'Show less' : `Show more (${remaining} more)`;
   }
 
   async function loadPhotos(){
@@ -1205,7 +989,12 @@
     adminLoginLink.style.display = loggedIn ? 'none' : 'inline';
     adminLoggedInLabel.style.display = loggedIn ? 'inline' : 'none';
     adminAddPhotoBox.style.display = loggedIn ? 'flex' : 'none';
+    const addVideoBox = document.getElementById('adminAddVideoBox');
+    if (addVideoBox) addVideoBox.style.display = loggedIn ? 'flex' : 'none';
     renderGallery();
+    if (typeof renderVideos === 'function' && typeof allVideos !== 'undefined') renderVideos();
+    if (typeof renderContentEditors === 'function') renderContentEditors();
+    if (typeof renderCalendar === 'function') renderCalendar();
   }
 
   async function verifyAdminToken(){
@@ -1298,8 +1087,9 @@
     }
   });
 
-  loadPhotos();
-  verifyAdminToken();
+  // (loadPhotos / verifyAdminToken / loadVideos are called once, at the very
+  // end of this script, after every function and variable below is declared —
+  // see bottom of file.)
 
   // ---------- Video lightbox ----------
   const videoLightbox = document.getElementById('videoLightbox');
@@ -1379,19 +1169,348 @@
     updateVideoLightbox();
   }
 
-  document.querySelectorAll('.video-thumb').forEach(thumb => {
-    thumb.addEventListener('click', () => {
-      const card = thumb.closest('.video-card');
-      openVideoLightbox(card.dataset.panel, parseInt(card.dataset.vidx, 10));
+  // ---------- Videos: loaded dynamically, with admin add/delete ----------
+  let allVideos = [];
+
+  function extractDriveFileId(driveUrl){
+    const m = (driveUrl || '').match(/\/d\/([a-zA-Z0-9_-]+)/);
+    return m ? m[1] : null;
+  }
+
+  function bindVideoCardListeners(){
+    document.querySelectorAll('.video-thumb').forEach(thumb => {
+      thumb.addEventListener('click', () => {
+        const card = thumb.closest('.video-card');
+        openVideoLightbox(card.dataset.panel, parseInt(card.dataset.vidx, 10));
+      });
     });
-  });
-  document.querySelectorAll('.video-expand-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const card = btn.closest('.video-card');
-      openVideoLightbox(card.dataset.panel, parseInt(card.dataset.vidx, 10));
+    document.querySelectorAll('.video-expand-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = btn.closest('.video-card');
+        openVideoLightbox(card.dataset.panel, parseInt(card.dataset.vidx, 10));
+      });
     });
+    document.querySelectorAll('.video-delete-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (!confirm('Delete this video?')) return;
+        try {
+          await fetch(`${COMMENTS_API_BASE}/api/admin/videos/${btn.dataset.videoId}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${adminToken}` },
+          });
+          loadVideos();
+        } catch (err) {
+          alert('Could not delete video. Please try again.');
+        }
+      });
+    });
+  }
+
+  function renderVideos(){
+    ['solo', 'duo', 'band'].forEach(category => {
+      const panel = document.getElementById(category);
+      const vids = allVideos.filter(v => v.category === category);
+      if (vids.length === 0) {
+        panel.innerHTML = '<div class="comment-empty">No videos in this category yet.</div>';
+        return;
+      }
+      panel.innerHTML = vids.map((v, idx) => {
+        const fileId = extractDriveFileId(v.drive_url);
+        const poster = fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w800` : '';
+        const title = (v.title || '').replace(/"/g, '&quot;');
+        const venue = (v.venue || '').replace(/"/g, '&quot;');
+        return `
+          <div class="video-card" data-vidx="${idx}" data-panel="${category}" data-src="${v.drive_url}" data-title="${title}" data-venue="${venue}">
+            <div class="video-thumb" data-loaded="false" style="background-image:url('${poster}');background-size:cover;background-position:center;"><div class="play-btn">&#9658;</div></div>
+            <div class="video-info">
+              <div><h3>${v.title || ''}</h3><p>${v.venue || ''}</p></div>
+              <div style="display:flex;gap:6px;align-items:flex-start;">
+                ${isAdminLoggedIn ? `<button class="video-delete-btn" data-video-id="${v.id}" aria-label="Delete video">&times;</button>` : ''}
+                <button class="video-expand-btn" aria-label="Expand video">&#x2922;</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    });
+    bindVideoCardListeners();
+  }
+
+  async function loadVideos(){
+    try {
+      const res = await fetch(`${COMMENTS_API_BASE}/api/videos`);
+      allVideos = await res.json();
+      renderVideos();
+    } catch (err) {
+      ['solo', 'duo', 'band'].forEach(category => {
+        document.getElementById(category).innerHTML = '<div class="comment-empty">Could not load videos right now.</div>';
+      });
+    }
+  }
+
+  document.getElementById('adminAddVideoBtn').addEventListener('click', async () => {
+    const urlInput = document.getElementById('adminVideoUrlInput');
+    const titleInput = document.getElementById('adminVideoTitleInput');
+    const venueInput = document.getElementById('adminVideoVenueInput');
+    const statusEl = document.getElementById('adminAddVideoStatus');
+    if (!urlInput.value.trim() || !titleInput.value.trim()) {
+      statusEl.textContent = 'A video link and title are required.';
+      return;
+    }
+    statusEl.textContent = 'Adding...';
+    try {
+      const res = await fetch(`${COMMENTS_API_BASE}/api/admin/videos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
+        body: JSON.stringify({
+          category: currentVideoTab,
+          url: urlInput.value.trim(),
+          title: titleInput.value.trim(),
+          venue: venueInput.value.trim(),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        statusEl.textContent = data.error || 'Could not add video.';
+        return;
+      }
+      urlInput.value = '';
+      titleInput.value = '';
+      venueInput.value = '';
+      statusEl.textContent = 'Added!';
+      loadVideos();
+      setTimeout(() => { statusEl.textContent = ''; }, 2000);
+    } catch (err) {
+      statusEl.textContent = 'Could not reach the server.';
+    }
   });
+
+  // (loadVideos is called once, at the very end of this script.)
+
+  // ---------- Editable site content: bio + fees ----------
+  let siteContent = {};
+  const defaultContent = {
+    bio_para1: document.getElementById('bioPara1').textContent,
+    bio_para2: document.getElementById('bioPara2').textContent,
+    fee_solo_price: document.getElementById('feeSoloPrice').textContent,
+    fee_duo_price: document.getElementById('feeDuoPrice').textContent,
+    fee_band_price: document.getElementById('feeBandPrice').textContent,
+    fee_note: document.getElementById('feeNote').textContent,
+  };
+
+  function renderContent(){
+    document.getElementById('bioPara1').textContent = siteContent.bio_para1 || defaultContent.bio_para1;
+    document.getElementById('bioPara2').textContent = siteContent.bio_para2 || defaultContent.bio_para2;
+    document.getElementById('feeSoloPrice').textContent = siteContent.fee_solo_price || defaultContent.fee_solo_price;
+    document.getElementById('feeDuoPrice').textContent = siteContent.fee_duo_price || defaultContent.fee_duo_price;
+    document.getElementById('feeBandPrice').textContent = siteContent.fee_band_price || defaultContent.fee_band_price;
+    document.getElementById('feeNote').textContent = siteContent.fee_note || defaultContent.fee_note;
+  }
+
+  function renderContentEditors(){
+    const bioBox = document.getElementById('adminEditBioBox');
+    const feesBox = document.getElementById('adminEditFeesBox');
+    if (!isAdminLoggedIn) {
+      bioBox.style.display = 'none';
+      feesBox.style.display = 'none';
+      return;
+    }
+    bioBox.style.display = 'flex';
+    feesBox.style.display = 'flex';
+    document.getElementById('adminBioPara1Input').value = siteContent.bio_para1 || defaultContent.bio_para1;
+    document.getElementById('adminBioPara2Input').value = siteContent.bio_para2 || defaultContent.bio_para2;
+    document.getElementById('adminFeeSoloInput').value = siteContent.fee_solo_price || defaultContent.fee_solo_price;
+    document.getElementById('adminFeeDuoInput').value = siteContent.fee_duo_price || defaultContent.fee_duo_price;
+    document.getElementById('adminFeeBandInput').value = siteContent.fee_band_price || defaultContent.fee_band_price;
+    document.getElementById('adminFeeNoteInput').value = siteContent.fee_note || defaultContent.fee_note;
+  }
+
+  async function loadContent(){
+    try {
+      const res = await fetch(`${COMMENTS_API_BASE}/api/content`);
+      siteContent = await res.json();
+    } catch (err) {
+      siteContent = {};
+    }
+    renderContent();
+    renderContentEditors();
+  }
+
+  document.getElementById('adminSaveBioBtn').addEventListener('click', async () => {
+    const statusEl = document.getElementById('adminSaveBioStatus');
+    statusEl.textContent = 'Saving...';
+    const bio_para1 = document.getElementById('adminBioPara1Input').value;
+    const bio_para2 = document.getElementById('adminBioPara2Input').value;
+    try {
+      const res = await fetch(`${COMMENTS_API_BASE}/api/admin/content`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
+        body: JSON.stringify({ bio_para1, bio_para2 }),
+      });
+      const data = await res.json();
+      if (!res.ok) { statusEl.textContent = data.error || 'Could not save.'; return; }
+      siteContent.bio_para1 = bio_para1;
+      siteContent.bio_para2 = bio_para2;
+      renderContent();
+      statusEl.textContent = 'Saved!';
+      setTimeout(() => { statusEl.textContent = ''; }, 2000);
+    } catch (err) {
+      statusEl.textContent = 'Could not reach the server.';
+    }
+  });
+
+  document.getElementById('adminSaveFeesBtn').addEventListener('click', async () => {
+    const statusEl = document.getElementById('adminSaveFeesStatus');
+    statusEl.textContent = 'Saving...';
+    const fee_solo_price = document.getElementById('adminFeeSoloInput').value;
+    const fee_duo_price = document.getElementById('adminFeeDuoInput').value;
+    const fee_band_price = document.getElementById('adminFeeBandInput').value;
+    const fee_note = document.getElementById('adminFeeNoteInput').value;
+    try {
+      const res = await fetch(`${COMMENTS_API_BASE}/api/admin/content`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
+        body: JSON.stringify({ fee_solo_price, fee_duo_price, fee_band_price, fee_note }),
+      });
+      const data = await res.json();
+      if (!res.ok) { statusEl.textContent = data.error || 'Could not save.'; return; }
+      Object.assign(siteContent, { fee_solo_price, fee_duo_price, fee_band_price, fee_note });
+      renderContent();
+      statusEl.textContent = 'Saved!';
+      setTimeout(() => { statusEl.textContent = ''; }, 2000);
+    } catch (err) {
+      statusEl.textContent = 'Could not reach the server.';
+    }
+  });
+
+
+  // ---------- Availability calendar ----------
+  let bookedDates = []; // [{id, event_date, note}]
+
+  function toDateStr(y, m, d){
+    return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  }
+
+  function buildMonthHtml(year, month){
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const todayStr = toDateStr(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    const bookedSet = new Set(bookedDates.map(b => b.event_date.slice(0, 10)));
+
+    let cells = '';
+    for (let i = 0; i < firstDay; i++) {
+      cells += '<div class="calendar-day empty"></div>';
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = toDateStr(year, month, d);
+      const classes = ['calendar-day'];
+      if (dateStr === todayStr) classes.push('today');
+      if (bookedSet.has(dateStr)) classes.push('booked');
+      const bookedInfo = bookedDates.find(b => b.event_date.slice(0, 10) === dateStr);
+      const title = bookedInfo && bookedInfo.note ? ` title="${bookedInfo.note.replace(/"/g,'&quot;')}"` : '';
+      cells += `<div class="${classes.join(' ')}"${title}>${d}</div>`;
+    }
+
+    return `
+      <div class="calendar-month">
+        <h3>${monthNames[month]} ${year}</h3>
+        <div class="calendar-weekdays"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
+        <div class="calendar-days">${cells}</div>
+      </div>
+    `;
+  }
+
+  function renderCalendar(){
+    const wrap = document.getElementById('calendarWrap');
+    const now = new Date();
+    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    wrap.innerHTML =
+      buildMonthHtml(now.getFullYear(), now.getMonth()) +
+      buildMonthHtml(nextMonth.getFullYear(), nextMonth.getMonth()) +
+      `<div class="calendar-legend" style="grid-column:1/-1;">
+        <span><span class="swatch"></span>Available</span>
+        <span><span class="swatch booked"></span>Booked</span>
+      </div>`;
+
+    const listEl = document.getElementById('adminBookedDatesList');
+    if (isAdminLoggedIn) {
+      if (bookedDates.length === 0) {
+        listEl.innerHTML = '<div class="comment-empty">No booked dates yet.</div>';
+      } else {
+        listEl.innerHTML = bookedDates.map(b => `
+          <div class="booked-date-row">
+            <span>${b.event_date.slice(0,10)}${b.note ? ' — ' + b.note.replace(/</g,'&lt;') : ''}</span>
+            <button data-booked-id="${b.id}" aria-label="Remove booked date">&times;</button>
+          </div>
+        `).join('');
+        listEl.querySelectorAll('button[data-booked-id]').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            if (!confirm('Remove this booked date?')) return;
+            try {
+              await fetch(`${COMMENTS_API_BASE}/api/admin/booked-dates/${btn.dataset.bookedId}`, {
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${adminToken}` },
+              });
+              loadBookedDates();
+            } catch (err) {
+              alert('Could not remove date. Please try again.');
+            }
+          });
+        });
+      }
+    } else {
+      listEl.innerHTML = '';
+    }
+  }
+
+  async function loadBookedDates(){
+    try {
+      const res = await fetch(`${COMMENTS_API_BASE}/api/booked-dates`);
+      bookedDates = await res.json();
+    } catch (err) {
+      bookedDates = [];
+    }
+    renderCalendar();
+  }
+
+  document.getElementById('adminAddBookedDateBtn').addEventListener('click', async () => {
+    const dateInput = document.getElementById('adminBookedDateInput');
+    const noteInput = document.getElementById('adminBookedNoteInput');
+    const statusEl = document.getElementById('adminBookedDateStatus');
+    if (!dateInput.value) {
+      statusEl.textContent = 'Pick a date first.';
+      return;
+    }
+    statusEl.textContent = 'Saving...';
+    try {
+      const res = await fetch(`${COMMENTS_API_BASE}/api/admin/booked-dates`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
+        body: JSON.stringify({ date: dateInput.value, note: noteInput.value.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) { statusEl.textContent = data.error || 'Could not save.'; return; }
+      dateInput.value = '';
+      noteInput.value = '';
+      statusEl.textContent = 'Marked as booked!';
+      loadBookedDates();
+      setTimeout(() => { statusEl.textContent = ''; }, 2000);
+    } catch (err) {
+      statusEl.textContent = 'Could not reach the server.';
+    }
+  });
+
+  // ---------- Now that every function/variable above is declared, do the
+  // actual initial data loads and admin-state check, in order. ----------
+  loadPhotos();
+  loadVideos();
+  loadContent();
+  loadBookedDates();
+  verifyAdminToken();
+
   document.getElementById('vlbClose').addEventListener('click', closeVideoLightbox);
   document.getElementById('vlbNext').addEventListener('click', showVideoNext);
   document.getElementById('vlbPrev').addEventListener('click', showVideoPrev);
@@ -1562,180 +1681,5 @@
 })();
 </script>
 
-<!-- ================= GOLDEN MIC EASTER EGG ================= -->
-<button class="gm-float" id="gmFloat" aria-label="???">
-  <svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg>
-</button>
-
-<div class="gm-modal-overlay" id="gmOverlay">
-  <div class="gm-modal">
-    <button class="gm-close" id="gmClose" aria-label="Close">&times;</button>
-
-    <div class="gm-reveal active" id="gmStepChoose">
-      <h3>You found something.</h3>
-      <p class="gm-sub">Which type of songs do you like?</p>
-      <div class="gm-choice-row">
-        <button class="gm-choice-btn" data-mood="sad">Sad</button>
-        <button class="gm-choice-btn" data-mood="romantic">Romantic</button>
-        <button class="gm-choice-btn" data-mood="retro">Old Retro</button>
-      </div>
-    </div>
-
-    <div class="gm-reveal" id="gmStepReveal">
-      <div class="gm-trophy">🏆</div>
-      <h3 class="gm-toast-title">Achievement Unlocked</h3>
-      <p class="gm-sub" id="gmRevealText">A little something, just for you.</p>
-      <audio id="gmAudio" controls style="width:100%;"></audio>
-      <p class="gm-audio-note">You've got a good ear for hidden things.</p>
-    </div>
-  </div>
-</div>
-
-<a
-  class="wa-float"
-  href="https://wa.me/918851978627?text=Hi%20Kushaagra!%20I%20found%20your%20website%20and%20wanted%20to%20know%20more%20about%20booking%20you%20for%20an%20event."
-  target="_blank"
-  rel="noopener"
-  aria-label="Chat on WhatsApp"
->
-  <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.44 1.32 4.94L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91C21.96 6.45 17.5 2 12.04 2zm0 18.06h-.01a8.13 8.13 0 0 1-4.15-1.14l-.3-.18-3.14.82.84-3.06-.19-.31a8.15 8.15 0 0 1-1.25-4.33c0-4.51 3.68-8.18 8.2-8.18 2.19 0 4.25.85 5.79 2.4a8.13 8.13 0 0 1 2.4 5.79c0 4.51-3.68 8.19-8.19 8.19zm4.49-6.13c-.25-.12-1.46-.72-1.68-.8-.23-.08-.39-.12-.56.12-.16.25-.64.8-.78.96-.15.16-.29.18-.53.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42h-.48c-.16 0-.43.06-.65.31-.23.25-.85.83-.85 2.02s.87 2.35.99 2.51c.12.16 1.71 2.6 4.14 3.65.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.09.47-.07 1.46-.6 1.66-1.17.21-.58.21-1.08.15-1.18-.06-.1-.23-.16-.48-.28z"/></svg>
-</a>
-<script>
-(function () {
-  const gmFloat = document.getElementById('gmFloat');
-  const gmOverlay = document.getElementById('gmOverlay');
-  const gmClose = document.getElementById('gmClose');
-  const gmStepChoose = document.getElementById('gmStepChoose');
-  const gmStepReveal = document.getElementById('gmStepReveal');
-  const gmAudio = document.getElementById('gmAudio');
-  const gmRevealText = document.getElementById('gmRevealText');
-
-  // ---- Trigger: reveal the mic after real engagement ----
-  // Whichever happens first: visitor scrolls to Contact, OR 40 seconds pass.
-  let revealed = false;
-  function revealMic() {
-    if (revealed) return;
-    revealed = true;
-    gmFloat.classList.add('visible');
-  }
-  setTimeout(revealMic, 40000);
-
-  const contactSection = document.getElementById('contact');
-  if (contactSection && 'IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) revealMic();
-      });
-    }, { threshold: 0.3 });
-    observer.observe(contactSection);
-  }
-
-  // ---- Open / close modal ----
-  gmFloat.addEventListener('click', () => {
-    gmOverlay.classList.add('open');
-    gmStepChoose.classList.add('active');
-    gmStepReveal.classList.remove('active');
-    gmAudio.pause();
-  });
-
-  function closeModal() {
-    gmOverlay.classList.remove('open');
-    gmAudio.pause();
-  }
-  gmClose.addEventListener('click', closeModal);
-  gmOverlay.addEventListener('click', (e) => {
-    if (e.target === gmOverlay) closeModal();
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && gmOverlay.classList.contains('open')) closeModal();
-  });
-
-  // ---- Mood choice → reveal + play + confetti ----
-  // ⚠️ Upload these 3 files to the repo root with these exact names:
-  // secret-sad.mp3, secret-romantic.mp3, secret-retro.mp3
-  const moodConfig = {
-    sad: { file: 'secret-sad.mp3', text: 'A quiet one, just for you.' },
-    romantic: { file: 'secret-romantic.mp3', text: 'For the hopeless romantics.' },
-    retro: { file: 'secret-retro.mp3', text: 'An old favorite, brought back.' },
-  };
-
-  document.querySelectorAll('.gm-choice-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const mood = btn.dataset.mood;
-      const config = moodConfig[mood];
-      gmAudio.src = config.file;
-      gmRevealText.textContent = config.text;
-
-      gmStepChoose.classList.remove('active');
-      gmStepReveal.classList.add('active');
-
-      gmAudio.play().catch(() => {
-        // Autoplay might be blocked on some mobile browsers — the visible
-        // <audio> controls let them press play manually as a fallback.
-      });
-
-      fireConfetti();
-    });
-  });
-
-  // ---- Lightweight confetti burst (no external library) ----
-  function fireConfetti() {
-    const colors = ['#c9a227', '#f2efe9', '#7a2331', '#e8c468'];
-    const pieceCount = 60;
-    for (let i = 0; i < pieceCount; i++) {
-      const piece = document.createElement('div');
-      piece.className = 'gm-confetti-piece';
-      piece.style.left = Math.random() * 100 + 'vw';
-      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-      piece.style.animationDuration = 2.5 + Math.random() * 1.5 + 's';
-      piece.style.opacity = 0.7 + Math.random() * 0.3;
-      document.body.appendChild(piece);
-      setTimeout(() => piece.remove(), 4200);
-    }
-  }
-})();
-</script>
-<script>
-(function () {
-  const API_BASE = 'https://kushaagra-comments-api.onrender.com';
-  const liveBadge = document.getElementById('liveBadge');
-  const liveBadgeText = document.getElementById('liveBadgeText');
-
-  // A per-tab ID, kept for the life of this tab (survives refresh, not a new tab)
-  let visitorId = sessionStorage.getItem('kg_visitor_id');
-  if (!visitorId) {
-    visitorId = (crypto.randomUUID ? crypto.randomUUID() : 'v-' + Math.random().toString(36).slice(2));
-    sessionStorage.setItem('kg_visitor_id', visitorId);
-  }
-
-  function updateBadge(count) {
-    if (!count || count < 1) {
-      liveBadge.style.display = 'none';
-      return;
-    }
-    liveBadgeText.textContent = count === 1
-      ? '1 person viewing now'
-      : `${count} people viewing now`;
-    liveBadge.style.display = 'inline-flex';
-  }
-
-  async function sendHeartbeat() {
-    try {
-      const res = await fetch(`${API_BASE}/api/visitors/heartbeat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ visitorId }),
-      });
-      const data = await res.json();
-      updateBadge(data.count);
-    } catch (err) {
-      // Silent fail — the badge just stays hidden if the backend is asleep/unreachable
-    }
-  }
-
-  sendHeartbeat();
-  setInterval(sendHeartbeat, 5000);
-})();
-</script>
 </body>
 </html>
