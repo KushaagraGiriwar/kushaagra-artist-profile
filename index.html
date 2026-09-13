@@ -729,20 +729,33 @@
 <!-- ================= DAY EDITOR MODAL (admin only) ================= -->
 <div class="lightbox" id="dayEditorModal">
   <button class="lightbox-close" id="dayEditorClose">&times;</button>
-  <div style="background:var(--ink-2);border:1px solid var(--line);padding:36px;width:min(360px,88vw);">
+  <div style="background:var(--ink-2);border:1px solid var(--line);padding:36px;width:min(380px,88vw);">
     <h3 style="font-family:'Fraunces',serif;margin-bottom:6px;" id="dayEditorDateLabel"></h3>
     <p style="font-size:0.85rem;color:var(--ivory-dim);margin-bottom:20px;" id="dayEditorStatusLabel"></p>
 
-    <button class="btn btn-ghost" id="dayEditorMarkBooked" style="width:100%;justify-content:center;margin-bottom:10px;">Mark as booked</button>
+    <button class="btn btn-ghost" id="dayEditorMarkBooked" style="width:100%;justify-content:center;margin-bottom:16px;">Mark as booked</button>
 
-    <div style="display:flex;gap:8px;margin-bottom:10px;">
-      <input type="text" id="dayEditorPriceInput" placeholder="Special price, e.g. ₹40,000" style="flex:1;background:var(--ink);border:1px solid var(--line);color:var(--ivory);padding:12px;font-family:'Inter',sans-serif;">
-      <button class="btn btn-primary" id="dayEditorMarkSpecial">Set</button>
-    </div>
-    <p style="font-size:0.78rem;color:var(--ivory-dim);margin-bottom:20px;">Use this for premium dates like Diwali or Christmas — the day stays available but shows a different price.</p>
+    <p style="font-size:0.78rem;color:var(--ivory-dim);margin-bottom:10px;">Or set a special price for this date (e.g. Diwali, Christmas) — it stays available, just at different rates:</p>
+    <label style="font-size:0.78rem;color:var(--ivory-dim);display:block;margin-bottom:4px;">Solo price</label>
+    <input type="text" id="dayEditorSoloInput" placeholder="e.g. ₹20,000" style="width:100%;background:var(--ink);border:1px solid var(--line);color:var(--ivory);padding:10px 12px;margin-bottom:10px;font-family:'Inter',sans-serif;">
+    <label style="font-size:0.78rem;color:var(--ivory-dim);display:block;margin-bottom:4px;">Duo price</label>
+    <input type="text" id="dayEditorDuoInput" placeholder="e.g. ₹32,000" style="width:100%;background:var(--ink);border:1px solid var(--line);color:var(--ivory);padding:10px 12px;margin-bottom:10px;font-family:'Inter',sans-serif;">
+    <label style="font-size:0.78rem;color:var(--ivory-dim);display:block;margin-bottom:4px;">Band price</label>
+    <input type="text" id="dayEditorBandInput" placeholder="e.g. ₹65,000" style="width:100%;background:var(--ink);border:1px solid var(--line);color:var(--ivory);padding:10px 12px;margin-bottom:14px;font-family:'Inter',sans-serif;">
+    <button class="btn btn-primary" id="dayEditorMarkSpecial" style="width:100%;justify-content:center;margin-bottom:16px;">Set special pricing</button>
 
     <button class="btn btn-ghost" id="dayEditorClear" style="width:100%;justify-content:center;color:var(--wine);border-color:var(--wine);">Clear / make available</button>
     <div id="dayEditorErr" style="color:var(--wine);font-size:0.85rem;margin-top:10px;min-height:1.2em;"></div>
+  </div>
+</div>
+
+<!-- ================= DAY VIEW MODAL (public, read-only) ================= -->
+<div class="lightbox" id="dayViewModal">
+  <button class="lightbox-close" id="dayViewClose">&times;</button>
+  <div style="background:var(--ink-2);border:1px solid var(--line);padding:36px;width:min(380px,88vw);">
+    <h3 style="font-family:'Fraunces',serif;margin-bottom:4px;" id="dayViewDateLabel"></h3>
+    <p style="font-size:0.85rem;color:var(--ivory-dim);margin-bottom:20px;" id="dayViewStatusLabel"></p>
+    <div id="dayViewPrices"></div>
   </div>
 </div>
 
@@ -1457,14 +1470,13 @@
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = toDateStr(year, month, d);
       const entry = findEntry(dateStr);
-      const classes = ['calendar-day'];
+      const classes = ['calendar-day', 'clickable'];
       if (dateStr === todayStr) classes.push('today');
       if (entry && entry.type === 'special_price') classes.push('special');
       else if (entry) classes.push('booked');
-      if (isAdminLoggedIn) classes.push('clickable');
       const title = entry
-        ? (entry.type === 'special_price' ? ` title="Special price: ${(entry.price||'').replace(/"/g,'&quot;')}"` : ' title="Booked"')
-        : '';
+        ? (entry.type === 'special_price' ? ' title="Special pricing — click for details"' : ' title="Booked"')
+        : ' title="Available — click for pricing"';
       cells += `<div class="${classes.join(' ')}" data-date="${dateStr}"${title}>${d}</div>`;
     }
 
@@ -1479,13 +1491,14 @@
     wrap.innerHTML = buildMonthHtml(calViewYear, calViewMonth);
     document.getElementById('availabilityHint').textContent = isAdminLoggedIn
       ? 'Click a date to manage it'
-      : 'Dates in wine are booked · gold border means special pricing applies';
+      : 'Click any date to see pricing for that day';
 
-    if (isAdminLoggedIn) {
-      wrap.querySelectorAll('.calendar-day.clickable').forEach(cell => {
-        cell.addEventListener('click', () => openDayEditor(cell.dataset.date));
+    wrap.querySelectorAll('.calendar-day.clickable').forEach(cell => {
+      cell.addEventListener('click', () => {
+        if (isAdminLoggedIn) openDayEditor(cell.dataset.date);
+        else openDayView(cell.dataset.date);
       });
-    }
+    });
 
     const listEl = document.getElementById('adminBookedDatesList');
     if (isAdminLoggedIn) {
@@ -1495,7 +1508,7 @@
       } else {
         listEl.innerHTML = sorted.map(b => {
           const label = b.type === 'special_price'
-            ? `${b.event_date.slice(0,10)} — Special price: ${b.price || '—'}`
+            ? `${b.event_date.slice(0,10)} — Special: Solo ${b.price_solo || '—'} · Duo ${b.price_duo || '—'} · Band ${b.price_band || '—'}`
             : `${b.event_date.slice(0,10)} — Booked`;
           return `
             <div class="booked-date-row">
@@ -1537,17 +1550,53 @@
     renderCalendar();
   });
 
-  // ---------- Day editor modal ----------
+  // ---------- Day view modal (public, read-only) ----------
+  const dayViewModal = document.getElementById('dayViewModal');
+
+  function openDayView(dateStr){
+    const entry = findEntry(dateStr);
+    document.getElementById('dayViewDateLabel').textContent = dateStr;
+    const statusEl = document.getElementById('dayViewStatusLabel');
+    const pricesEl = document.getElementById('dayViewPrices');
+
+    if (entry && entry.type === 'booked') {
+      statusEl.textContent = 'This date is already booked.';
+      pricesEl.innerHTML = '';
+    } else if (entry && entry.type === 'special_price') {
+      statusEl.textContent = 'Available — special pricing for this date:';
+      pricesEl.innerHTML = `
+        <div class="fact"><span>Solo</span><span>${entry.price_solo || '—'}</span></div>
+        <div class="fact"><span>Duo</span><span>${entry.price_duo || '—'}</span></div>
+        <div class="fact"><span>Band</span><span>${entry.price_band || '—'}</span></div>
+      `;
+    } else {
+      statusEl.textContent = 'Available — standard pricing:';
+      pricesEl.innerHTML = `
+        <div class="fact"><span>Solo</span><span>${siteContent.fee_solo_price || defaultContent.fee_solo_price}</span></div>
+        <div class="fact"><span>Duo</span><span>${siteContent.fee_duo_price || defaultContent.fee_duo_price}</span></div>
+        <div class="fact"><span>Band</span><span>${siteContent.fee_band_price || defaultContent.fee_band_price}</span></div>
+      `;
+    }
+    dayViewModal.classList.add('open');
+  }
+  document.getElementById('dayViewClose').addEventListener('click', () => dayViewModal.classList.remove('open'));
+  dayViewModal.addEventListener('click', (e) => {
+    if (e.target === dayViewModal) dayViewModal.classList.remove('open');
+  });
+
+  // ---------- Day editor modal (admin) ----------
   const dayEditorModal = document.getElementById('dayEditorModal');
 
   function openDayEditor(dateStr){
     dayEditorDate = dateStr;
     document.getElementById('dayEditorErr').textContent = '';
-    document.getElementById('dayEditorPriceInput').value = '';
     const entry = findEntry(dateStr);
+    document.getElementById('dayEditorSoloInput').value = (entry && entry.price_solo) || '';
+    document.getElementById('dayEditorDuoInput').value = (entry && entry.price_duo) || '';
+    document.getElementById('dayEditorBandInput').value = (entry && entry.price_band) || '';
     document.getElementById('dayEditorDateLabel').textContent = dateStr;
     document.getElementById('dayEditorStatusLabel').textContent = entry
-      ? (entry.type === 'special_price' ? `Currently: special price (${entry.price || 'no price set'})` : 'Currently: booked')
+      ? (entry.type === 'special_price' ? 'Currently: special pricing set' : 'Currently: booked')
       : 'Currently: available';
     dayEditorModal.classList.add('open');
   }
@@ -1560,13 +1609,19 @@
     if (e.target === dayEditorModal) closeDayEditor();
   });
 
-  async function saveDate(type, price){
+  async function saveDate(type, prices){
     const errEl = document.getElementById('dayEditorErr');
     try {
       const res = await fetch(`${COMMENTS_API_BASE}/api/admin/booked-dates`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
-        body: JSON.stringify({ date: dayEditorDate, type, price: price || '' }),
+        body: JSON.stringify({
+          date: dayEditorDate,
+          type,
+          price_solo: (prices && prices.solo) || '',
+          price_duo: (prices && prices.duo) || '',
+          price_band: (prices && prices.band) || '',
+        }),
       });
       const data = await res.json();
       if (!res.ok) { errEl.textContent = data.error || 'Could not save.'; return; }
@@ -1589,14 +1644,16 @@
     }
   }
 
-  document.getElementById('dayEditorMarkBooked').addEventListener('click', () => saveDate('booked', ''));
+  document.getElementById('dayEditorMarkBooked').addEventListener('click', () => saveDate('booked', null));
   document.getElementById('dayEditorMarkSpecial').addEventListener('click', () => {
-    const price = document.getElementById('dayEditorPriceInput').value.trim();
-    if (!price) {
-      document.getElementById('dayEditorErr').textContent = 'Enter a price first.';
+    const solo = document.getElementById('dayEditorSoloInput').value.trim();
+    const duo = document.getElementById('dayEditorDuoInput').value.trim();
+    const band = document.getElementById('dayEditorBandInput').value.trim();
+    if (!solo && !duo && !band) {
+      document.getElementById('dayEditorErr').textContent = 'Enter at least one price.';
       return;
     }
-    saveDate('special_price', price);
+    saveDate('special_price', { solo, duo, band });
   });
   document.getElementById('dayEditorClear').addEventListener('click', async () => {
     if (!dayEditorDate) return;
