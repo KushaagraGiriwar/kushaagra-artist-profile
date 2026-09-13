@@ -717,6 +717,10 @@
   </div>
 
   <div class="comments-wrap">
+    <a href="https://kushaagra-comments-api.onrender.com/admin" target="_blank" rel="noopener"
+       id="adminModerateLink" class="btn btn-ghost" style="display:none;width:fit-content;margin-bottom:22px;">
+       Moderate pending comments &rarr;
+    </a>
     <p class="comment-form-note">Leave a message — comments are checked before they go live, so yours may take a little while to appear.</p>
 
     <form class="cform" id="commentForm">
@@ -802,7 +806,9 @@
   <div id="adminFooterArea">
     <a href="#" id="adminLoginLink" style="color:var(--ivory-dim);text-decoration:underline;">Admin</a>
     <span id="adminLoggedInLabel" style="display:none;">
-      Admin mode — <a href="#" id="adminLogoutLink" style="color:var(--brass);text-decoration:underline;">log out</a>
+      Admin mode —
+      <a href="https://kushaagra-comments-api.onrender.com/admin" target="_blank" rel="noopener" style="color:var(--brass);text-decoration:underline;">moderate comments</a>
+      · <a href="#" id="adminLogoutLink" style="color:var(--brass);text-decoration:underline;">log out</a>
     </span>
   </div>
 </footer>
@@ -991,6 +997,8 @@
     adminAddPhotoBox.style.display = loggedIn ? 'flex' : 'none';
     const addVideoBox = document.getElementById('adminAddVideoBox');
     if (addVideoBox) addVideoBox.style.display = loggedIn ? 'flex' : 'none';
+    const moderateLink = document.getElementById('adminModerateLink');
+    if (moderateLink) moderateLink.style.display = loggedIn ? 'inline-flex' : 'none';
     renderGallery();
     if (typeof renderVideos === 'function' && typeof allVideos !== 'undefined') renderVideos();
     if (typeof renderContentEditors === 'function') renderContentEditors();
@@ -1434,6 +1442,9 @@
         <span><span class="swatch"></span>Available</span>
         <span><span class="swatch booked"></span>Booked</span>
       </div>`;
+
+    const bookedBox = document.getElementById('adminBookedDatesBox');
+    bookedBox.style.display = isAdminLoggedIn ? 'flex' : 'none';
 
     const listEl = document.getElementById('adminBookedDatesList');
     if (isAdminLoggedIn) {
