@@ -383,14 +383,14 @@
     cursor:pointer;transition:all .2s;
   }
   .calendar-nav-btn:hover{border-color:var(--brass);color:var(--brass);}
-  .calendar-wrap.single{max-width:480px;margin:0 auto;}
+  .calendar-wrap.single{max-width:680px;margin:0 auto;}
   .calendar-month h3{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:16px;font-weight:600;}
-  .calendar-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px;}
-  .calendar-weekdays span{text-align:center;font-size:0.72rem;color:var(--ivory-dim);text-transform:uppercase;letter-spacing:0.04em;}
-  .calendar-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
+  .calendar-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:10px;}
+  .calendar-weekdays span{text-align:center;font-size:0.8rem;color:var(--ivory-dim);text-transform:uppercase;letter-spacing:0.04em;}
+  .calendar-days{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;}
   .calendar-day{
     aspect-ratio:1;display:flex;align-items:center;justify-content:center;
-    font-size:0.9rem;color:var(--ivory-dim);border:1px solid var(--line);
+    font-size:1.1rem;color:var(--ivory-dim);border:1px solid var(--line);
     transition:transform .15s, border-color .15s;
   }
   .calendar-day.empty{border:none;}
@@ -407,7 +407,7 @@
   .booked-date-row{
     display:flex;justify-content:space-between;align-items:center;
     padding:10px 0;border-bottom:1px solid var(--line);font-size:0.88rem;color:var(--ivory-dim);
-    max-width:480px;margin:0 auto;
+    max-width:680px;margin:0 auto;
   }
   .booked-date-row button{
     background:transparent;border:1px solid var(--wine);color:var(--ivory);
