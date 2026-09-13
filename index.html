@@ -374,34 +374,46 @@
   .fee-note{margin-top:26px;font-size:0.88rem;color:var(--ivory-dim);}
 
   /* ---------- Availability calendar ---------- */
-  .calendar-wrap{display:grid;grid-template-columns:1fr 1fr;gap:50px;}
+  .calendar-nav{display:flex;align-items:center;justify-content:center;gap:26px;margin-bottom:26px;}
+  .calendar-nav h3{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;min-width:200px;text-align:center;}
+  .calendar-nav-btn{
+    width:40px;height:40px;border-radius:50%;
+    background:transparent;border:1px solid var(--line);color:var(--ivory);
+    display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+    cursor:pointer;transition:all .2s;
+  }
+  .calendar-nav-btn:hover{border-color:var(--brass);color:var(--brass);}
+  .calendar-wrap.single{max-width:480px;margin:0 auto;}
   .calendar-month h3{font-family:'Fraunces',serif;font-size:1.2rem;margin-bottom:16px;font-weight:600;}
   .calendar-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:8px;}
   .calendar-weekdays span{text-align:center;font-size:0.72rem;color:var(--ivory-dim);text-transform:uppercase;letter-spacing:0.04em;}
   .calendar-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
   .calendar-day{
     aspect-ratio:1;display:flex;align-items:center;justify-content:center;
-    font-size:0.85rem;color:var(--ivory-dim);border:1px solid var(--line);
+    font-size:0.9rem;color:var(--ivory-dim);border:1px solid var(--line);
+    transition:transform .15s, border-color .15s;
   }
   .calendar-day.empty{border:none;}
   .calendar-day.today{border-color:var(--brass);color:var(--brass);font-weight:600;}
   .calendar-day.booked{background:var(--wine);color:var(--ivory);border-color:var(--wine);font-weight:600;}
-  .calendar-legend{display:flex;gap:18px;margin-top:20px;font-size:0.82rem;color:var(--ivory-dim);}
+  .calendar-day.special{background:transparent;border:2px solid var(--brass);color:var(--brass);font-weight:600;}
+  .calendar-day.clickable{cursor:pointer;}
+  .calendar-day.clickable:hover{transform:scale(1.08);border-color:var(--brass);z-index:1;}
+  .calendar-legend{display:flex;gap:18px;margin-top:26px;font-size:0.82rem;color:var(--ivory-dim);justify-content:center;flex-wrap:wrap;}
   .calendar-legend span{display:inline-flex;align-items:center;gap:8px;}
   .calendar-legend .swatch{width:14px;height:14px;display:inline-block;border:1px solid var(--line);}
   .calendar-legend .swatch.booked{background:var(--wine);border-color:var(--wine);}
+  .calendar-legend .swatch.special{background:transparent;border:2px solid var(--brass);}
   .booked-date-row{
     display:flex;justify-content:space-between;align-items:center;
     padding:10px 0;border-bottom:1px solid var(--line);font-size:0.88rem;color:var(--ivory-dim);
+    max-width:480px;margin:0 auto;
   }
   .booked-date-row button{
     background:transparent;border:1px solid var(--wine);color:var(--ivory);
     width:26px;height:26px;border-radius:50%;cursor:pointer;transition:all .2s;
   }
   .booked-date-row button:hover{background:var(--wine);}
-  @media(max-width:700px){
-    .calendar-wrap{grid-template-columns:1fr;}
-  }
 
   /* ---------- Testimonials ---------- */
   .testimonial-row{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;}
@@ -692,22 +704,47 @@
 <section id="availability" class="ambient" style="--glow-x:20%;--glow-y:90%;--glow-x2:80%;--glow-y2:10%;">
   <div class="section-head">
     <h2 class="reveal">Availability</h2>
-    <span class="edit-hint">Dates in gold are already booked</span>
+    <span class="edit-hint" id="availabilityHint">Click a date to manage it — admin only</span>
   </div>
-  <div class="calendar-wrap" id="calendarWrap">
+
+  <div class="calendar-nav">
+    <button class="calendar-nav-btn" id="calPrevBtn" aria-label="Previous month">&#8249;</button>
+    <h3 id="calMonthLabel"></h3>
+    <button class="calendar-nav-btn" id="calNextBtn" aria-label="Next month">&#8250;</button>
+  </div>
+
+  <div class="calendar-wrap single" id="calendarWrap">
     <div class="comment-loading">Loading calendar…</div>
   </div>
 
-  <div id="adminBookedDatesBox" class="admin-add-photo" style="display:none;flex-direction:column;align-items:stretch;margin-top:30px;">
-    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      <input type="date" id="adminBookedDateInput">
-      <input type="text" id="adminBookedNoteInput" placeholder="Note (optional, e.g. client/event name)">
-      <button class="btn btn-primary" id="adminAddBookedDateBtn">Mark as booked</button>
-    </div>
-    <span id="adminBookedDateStatus"></span>
-    <div id="adminBookedDatesList" style="margin-top:16px;"></div>
+  <div class="calendar-legend">
+    <span><span class="swatch"></span>Available</span>
+    <span><span class="swatch booked"></span>Booked</span>
+    <span><span class="swatch special"></span>Special pricing</span>
   </div>
+
+  <div id="adminBookedDatesList" style="margin-top:26px;"></div>
 </section>
+
+<!-- ================= DAY EDITOR MODAL (admin only) ================= -->
+<div class="lightbox" id="dayEditorModal">
+  <button class="lightbox-close" id="dayEditorClose">&times;</button>
+  <div style="background:var(--ink-2);border:1px solid var(--line);padding:36px;width:min(360px,88vw);">
+    <h3 style="font-family:'Fraunces',serif;margin-bottom:6px;" id="dayEditorDateLabel"></h3>
+    <p style="font-size:0.85rem;color:var(--ivory-dim);margin-bottom:20px;" id="dayEditorStatusLabel"></p>
+
+    <button class="btn btn-ghost" id="dayEditorMarkBooked" style="width:100%;justify-content:center;margin-bottom:10px;">Mark as booked</button>
+
+    <div style="display:flex;gap:8px;margin-bottom:10px;">
+      <input type="text" id="dayEditorPriceInput" placeholder="Special price, e.g. ₹40,000" style="flex:1;background:var(--ink);border:1px solid var(--line);color:var(--ivory);padding:12px;font-family:'Inter',sans-serif;">
+      <button class="btn btn-primary" id="dayEditorMarkSpecial">Set</button>
+    </div>
+    <p style="font-size:0.78rem;color:var(--ivory-dim);margin-bottom:20px;">Use this for premium dates like Diwali or Christmas — the day stays available but shows a different price.</p>
+
+    <button class="btn btn-ghost" id="dayEditorClear" style="width:100%;justify-content:center;color:var(--wine);border-color:var(--wine);">Clear / make available</button>
+    <div id="dayEditorErr" style="color:var(--wine);font-size:0.85rem;margin-top:10px;min-height:1.2em;"></div>
+  </div>
+</div>
 
 <!-- ================= COMMENTS (What people say) ================= -->
 <section id="comments">
@@ -1395,18 +1432,23 @@
 
 
   // ---------- Availability calendar ----------
-  let bookedDates = []; // [{id, event_date, note}]
+  let bookedDates = []; // [{id, event_date, note, type, price}]
+  let calViewYear = new Date().getFullYear();
+  let calViewMonth = new Date().getMonth();
+  let dayEditorDate = null; // the date string currently open in the modal
 
   function toDateStr(y, m, d){
     return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
   }
 
+  function findEntry(dateStr){
+    return bookedDates.find(b => b.event_date.slice(0, 10) === dateStr);
+  }
+
   function buildMonthHtml(year, month){
-    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const todayStr = toDateStr(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-    const bookedSet = new Set(bookedDates.map(b => b.event_date.slice(0, 10)));
 
     let cells = '';
     for (let i = 0; i < firstDay; i++) {
@@ -1414,61 +1456,58 @@
     }
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = toDateStr(year, month, d);
+      const entry = findEntry(dateStr);
       const classes = ['calendar-day'];
       if (dateStr === todayStr) classes.push('today');
-      if (bookedSet.has(dateStr)) classes.push('booked');
-      const bookedInfo = bookedDates.find(b => b.event_date.slice(0, 10) === dateStr);
-      const title = bookedInfo && bookedInfo.note ? ` title="${bookedInfo.note.replace(/"/g,'&quot;')}"` : '';
-      cells += `<div class="${classes.join(' ')}"${title}>${d}</div>`;
+      if (entry && entry.type === 'special_price') classes.push('special');
+      else if (entry) classes.push('booked');
+      if (isAdminLoggedIn) classes.push('clickable');
+      const title = entry
+        ? (entry.type === 'special_price' ? ` title="Special price: ${(entry.price||'').replace(/"/g,'&quot;')}"` : ' title="Booked"')
+        : '';
+      cells += `<div class="${classes.join(' ')}" data-date="${dateStr}"${title}>${d}</div>`;
     }
 
-    return `
-      <div class="calendar-month">
-        <h3>${monthNames[month]} ${year}</h3>
-        <div class="calendar-weekdays"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
-        <div class="calendar-days">${cells}</div>
-      </div>
-    `;
+    return `<div class="calendar-weekdays"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
+      <div class="calendar-days">${cells}</div>`;
   }
 
   function renderCalendar(){
     const wrap = document.getElementById('calendarWrap');
-    const now = new Date();
-    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-    wrap.innerHTML =
-      buildMonthHtml(now.getFullYear(), now.getMonth()) +
-      buildMonthHtml(nextMonth.getFullYear(), nextMonth.getMonth()) +
-      `<div class="calendar-legend" style="grid-column:1/-1;">
-        <span><span class="swatch"></span>Available</span>
-        <span><span class="swatch booked"></span>Booked</span>
-      </div>`;
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('calMonthLabel').textContent = `${monthNames[calViewMonth]} ${calViewYear}`;
+    wrap.innerHTML = buildMonthHtml(calViewYear, calViewMonth);
+    document.getElementById('availabilityHint').textContent = isAdminLoggedIn
+      ? 'Click a date to manage it'
+      : 'Dates in wine are booked · gold border means special pricing applies';
 
-    const bookedBox = document.getElementById('adminBookedDatesBox');
-    bookedBox.style.display = isAdminLoggedIn ? 'flex' : 'none';
+    if (isAdminLoggedIn) {
+      wrap.querySelectorAll('.calendar-day.clickable').forEach(cell => {
+        cell.addEventListener('click', () => openDayEditor(cell.dataset.date));
+      });
+    }
 
     const listEl = document.getElementById('adminBookedDatesList');
     if (isAdminLoggedIn) {
-      if (bookedDates.length === 0) {
-        listEl.innerHTML = '<div class="comment-empty">No booked dates yet.</div>';
+      const sorted = [...bookedDates].sort((a, b) => a.event_date.localeCompare(b.event_date));
+      if (sorted.length === 0) {
+        listEl.innerHTML = '<div class="comment-empty">No marked dates yet.</div>';
       } else {
-        listEl.innerHTML = bookedDates.map(b => `
-          <div class="booked-date-row">
-            <span>${b.event_date.slice(0,10)}${b.note ? ' — ' + b.note.replace(/</g,'&lt;') : ''}</span>
-            <button data-booked-id="${b.id}" aria-label="Remove booked date">&times;</button>
-          </div>
-        `).join('');
-        listEl.querySelectorAll('button[data-booked-id]').forEach(btn => {
+        listEl.innerHTML = sorted.map(b => {
+          const label = b.type === 'special_price'
+            ? `${b.event_date.slice(0,10)} — Special price: ${b.price || '—'}`
+            : `${b.event_date.slice(0,10)} — Booked`;
+          return `
+            <div class="booked-date-row">
+              <span>${label}</span>
+              <button data-date="${b.event_date.slice(0,10)}" aria-label="Remove">&times;</button>
+            </div>
+          `;
+        }).join('');
+        listEl.querySelectorAll('button[data-date]').forEach(btn => {
           btn.addEventListener('click', async () => {
-            if (!confirm('Remove this booked date?')) return;
-            try {
-              await fetch(`${COMMENTS_API_BASE}/api/admin/booked-dates/${btn.dataset.bookedId}`, {
-                method: 'DELETE',
-                headers: { Authorization: `Bearer ${adminToken}` },
-              });
-              loadBookedDates();
-            } catch (err) {
-              alert('Could not remove date. Please try again.');
-            }
+            if (!confirm('Clear this date back to available?')) return;
+            await clearDate(btn.dataset.date);
           });
         });
       }
@@ -1487,31 +1526,82 @@
     renderCalendar();
   }
 
-  document.getElementById('adminAddBookedDateBtn').addEventListener('click', async () => {
-    const dateInput = document.getElementById('adminBookedDateInput');
-    const noteInput = document.getElementById('adminBookedNoteInput');
-    const statusEl = document.getElementById('adminBookedDateStatus');
-    if (!dateInput.value) {
-      statusEl.textContent = 'Pick a date first.';
-      return;
-    }
-    statusEl.textContent = 'Saving...';
+  document.getElementById('calPrevBtn').addEventListener('click', () => {
+    calViewMonth -= 1;
+    if (calViewMonth < 0) { calViewMonth = 11; calViewYear -= 1; }
+    renderCalendar();
+  });
+  document.getElementById('calNextBtn').addEventListener('click', () => {
+    calViewMonth += 1;
+    if (calViewMonth > 11) { calViewMonth = 0; calViewYear += 1; }
+    renderCalendar();
+  });
+
+  // ---------- Day editor modal ----------
+  const dayEditorModal = document.getElementById('dayEditorModal');
+
+  function openDayEditor(dateStr){
+    dayEditorDate = dateStr;
+    document.getElementById('dayEditorErr').textContent = '';
+    document.getElementById('dayEditorPriceInput').value = '';
+    const entry = findEntry(dateStr);
+    document.getElementById('dayEditorDateLabel').textContent = dateStr;
+    document.getElementById('dayEditorStatusLabel').textContent = entry
+      ? (entry.type === 'special_price' ? `Currently: special price (${entry.price || 'no price set'})` : 'Currently: booked')
+      : 'Currently: available';
+    dayEditorModal.classList.add('open');
+  }
+  function closeDayEditor(){
+    dayEditorModal.classList.remove('open');
+    dayEditorDate = null;
+  }
+  document.getElementById('dayEditorClose').addEventListener('click', closeDayEditor);
+  dayEditorModal.addEventListener('click', (e) => {
+    if (e.target === dayEditorModal) closeDayEditor();
+  });
+
+  async function saveDate(type, price){
+    const errEl = document.getElementById('dayEditorErr');
     try {
       const res = await fetch(`${COMMENTS_API_BASE}/api/admin/booked-dates`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
-        body: JSON.stringify({ date: dateInput.value, note: noteInput.value.trim() }),
+        body: JSON.stringify({ date: dayEditorDate, type, price: price || '' }),
       });
       const data = await res.json();
-      if (!res.ok) { statusEl.textContent = data.error || 'Could not save.'; return; }
-      dateInput.value = '';
-      noteInput.value = '';
-      statusEl.textContent = 'Marked as booked!';
+      if (!res.ok) { errEl.textContent = data.error || 'Could not save.'; return; }
+      closeDayEditor();
       loadBookedDates();
-      setTimeout(() => { statusEl.textContent = ''; }, 2000);
     } catch (err) {
-      statusEl.textContent = 'Could not reach the server.';
+      errEl.textContent = 'Could not reach the server.';
     }
+  }
+
+  async function clearDate(dateStr){
+    try {
+      await fetch(`${COMMENTS_API_BASE}/api/admin/booked-dates/by-date/${dateStr}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${adminToken}` },
+      });
+      loadBookedDates();
+    } catch (err) {
+      alert('Could not clear that date. Please try again.');
+    }
+  }
+
+  document.getElementById('dayEditorMarkBooked').addEventListener('click', () => saveDate('booked', ''));
+  document.getElementById('dayEditorMarkSpecial').addEventListener('click', () => {
+    const price = document.getElementById('dayEditorPriceInput').value.trim();
+    if (!price) {
+      document.getElementById('dayEditorErr').textContent = 'Enter a price first.';
+      return;
+    }
+    saveDate('special_price', price);
+  });
+  document.getElementById('dayEditorClear').addEventListener('click', async () => {
+    if (!dayEditorDate) return;
+    await clearDate(dayEditorDate);
+    closeDayEditor();
   });
 
   // ---------- Now that every function/variable above is declared, do the
