@@ -437,6 +437,43 @@
   }
   .booked-date-row button:hover{background:var(--wine);}
 
+  /* ---------- Comment moderation panel ---------- */
+  .mod-columns{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+  .mod-column h4{
+    font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;
+    margin-bottom:18px;display:flex;align-items:center;gap:10px;
+    border-bottom:1px solid var(--line);padding-bottom:14px;
+  }
+  .mod-count{
+    background:var(--ink-2);border:1px solid var(--line);color:var(--ivory-dim);
+    font-size:0.75rem;font-family:'Inter',sans-serif;font-weight:600;
+    padding:2px 10px;border-radius:20px;
+  }
+  .mod-card{
+    background:var(--ink-2);border:1px solid var(--line);border-left:3px solid var(--line);
+    padding:16px 18px;margin-bottom:14px;
+  }
+  .mod-card.pending{border-left-color:var(--brass);}
+  .mod-card.approved{border-left-color:#3a7d44;}
+  .mod-meta{
+    display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px;
+    font-size:0.8rem;color:var(--ivory-dim);margin-bottom:10px;
+  }
+  .mod-meta strong{color:var(--ivory);font-weight:600;}
+  .mod-message{font-size:0.92rem;color:var(--ivory);line-height:1.55;margin-bottom:14px;}
+  .mod-actions{display:flex;gap:10px;}
+  .mod-actions button{
+    padding:7px 16px;border-radius:20px;font-size:0.8rem;font-weight:600;
+    cursor:pointer;transition:all .2s;border:1px solid var(--line);background:transparent;color:var(--ivory);
+  }
+  .mod-actions .mod-approve{border-color:#3a7d44;color:#7fd992;}
+  .mod-actions .mod-approve:hover{background:#3a7d44;color:var(--ivory);}
+  .mod-actions .mod-delete{border-color:var(--wine);color:var(--ivory);}
+  .mod-actions .mod-delete:hover{background:var(--wine);}
+  @media(max-width:860px){
+    .mod-columns{grid-template-columns:1fr;gap:36px;}
+  }
+
   /* ---------- Testimonials ---------- */
   .testimonial-row{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;}
   .testimonial{border-top:2px solid var(--brass);padding-top:20px;}
@@ -793,7 +830,7 @@
   </div>
 
   <div class="comments-wrap">
-    <a href="https://kushaagra-comments-api.onrender.com/admin" target="_blank" rel="noopener"
+    <a href="#commentModeration"
        id="adminModerateLink" class="btn btn-ghost" style="display:none;width:fit-content;margin-bottom:22px;">
        Moderate pending comments &rarr;
     </a>
@@ -827,6 +864,24 @@
         <div class="comment-loading">Loading comments…</div>
       </div>
       <button class="comment-arrow comment-arrow-next" id="commentNextBtn" aria-label="Next comments" style="display:none;">&#8250;</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COMMENT MODERATION (admin only) ================= -->
+<section id="commentModeration" class="ambient" style="--glow-x:75%;--glow-y:20%;--glow-x2:25%;--glow-y2:80%;display:none;">
+  <div class="section-head">
+    <h2 class="reveal">Comment moderation</h2>
+    <span class="edit-hint">Admin only — approve or remove comments here</span>
+  </div>
+  <div class="mod-columns">
+    <div class="mod-column">
+      <h4>Pending <span class="mod-count" id="modPendingCount">0</span></h4>
+      <div id="modPendingList"><div class="comment-loading">Loading…</div></div>
+    </div>
+    <div class="mod-column">
+      <h4>Approved <span class="mod-count" id="modApprovedCount">0</span></h4>
+      <div id="modApprovedList"><div class="comment-loading">Loading…</div></div>
     </div>
   </div>
 </section>
@@ -883,7 +938,7 @@
     <a href="#" id="adminLoginLink" style="color:var(--ivory-dim);text-decoration:underline;">Admin</a>
     <span id="adminLoggedInLabel" style="display:none;">
       Admin mode —
-      <a href="https://kushaagra-comments-api.onrender.com/admin" target="_blank" rel="noopener" style="color:var(--brass);text-decoration:underline;">moderate comments</a>
+      <a href="#commentModeration" style="color:var(--brass);text-decoration:underline;">moderate comments</a>
       · <a href="#" id="adminLogoutLink" style="color:var(--brass);text-decoration:underline;">log out</a>
     </span>
   </div>
@@ -1075,6 +1130,9 @@
     if (addVideoBox) addVideoBox.style.display = loggedIn ? 'flex' : 'none';
     const moderateLink = document.getElementById('adminModerateLink');
     if (moderateLink) moderateLink.style.display = loggedIn ? 'inline-flex' : 'none';
+    const modSection = document.getElementById('commentModeration');
+    if (modSection) modSection.style.display = loggedIn ? 'block' : 'none';
+    if (loggedIn && typeof loadModerationComments === 'function') loadModerationComments();
     renderGallery();
     if (typeof renderVideos === 'function' && typeof allVideos !== 'undefined') renderVideos();
     if (typeof renderContentEditors === 'function') renderContentEditors();
@@ -1686,6 +1744,88 @@
     await clearDate(dayEditorDate);
     closeDayEditor();
   });
+
+  // ---------- Comment moderation (in-page, reuses the existing admin token) ----------
+  function escapeHtmlMod(str){
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
+  function renderModComment(c, status){
+    const date = new Date(c.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    const approveBtn = status === 'pending' ? `<button class="mod-approve" data-id="${c.id}" data-action="approve">Approve</button>` : '';
+    return `
+      <div class="mod-card ${status}">
+        <div class="mod-meta">
+          <span><strong>${escapeHtmlMod(c.name)}</strong> · ${escapeHtmlMod(c.contact)}</span>
+          <span>${date}</span>
+        </div>
+        <div class="mod-message">${escapeHtmlMod(c.message)}</div>
+        <div class="mod-actions">
+          ${approveBtn}
+          <button class="mod-delete" data-id="${c.id}" data-action="delete">Delete</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function bindModActions(){
+    document.querySelectorAll('#commentModeration button[data-action]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const action = btn.dataset.action;
+        if (action === 'delete' && !confirm('Delete this comment permanently?')) return;
+        try {
+          if (action === 'approve') {
+            await fetch(`${COMMENTS_API_BASE}/api/admin/comments/${id}/approve`, {
+              method: 'PATCH',
+              headers: { Authorization: `Bearer ${adminToken}` },
+            });
+          } else {
+            await fetch(`${COMMENTS_API_BASE}/api/admin/comments/${id}`, {
+              method: 'DELETE',
+              headers: { Authorization: `Bearer ${adminToken}` },
+            });
+          }
+          loadModerationComments();
+          loadComments(); // refresh the public "What people say" carousel too
+        } catch (err) {
+          alert('Could not complete that action. Please try again.');
+        }
+      });
+    });
+  }
+
+  async function loadModerationComments(){
+    const pendingEl = document.getElementById('modPendingList');
+    const approvedEl = document.getElementById('modApprovedList');
+    if (!pendingEl || !adminToken) return;
+    try {
+      const res = await fetch(`${COMMENTS_API_BASE}/api/admin/comments`, {
+        headers: { Authorization: `Bearer ${adminToken}` },
+      });
+      if (res.status === 401) return;
+      const all = await res.json();
+      const pending = all.filter(c => c.status !== 'approved');
+      const approved = all.filter(c => c.status === 'approved');
+
+      document.getElementById('modPendingCount').textContent = pending.length;
+      document.getElementById('modApprovedCount').textContent = approved.length;
+
+      pendingEl.innerHTML = pending.length
+        ? pending.map(c => renderModComment(c, 'pending')).join('')
+        : '<div class="comment-empty">No pending comments.</div>';
+      approvedEl.innerHTML = approved.length
+        ? approved.map(c => renderModComment(c, 'approved')).join('')
+        : '<div class="comment-empty">No approved comments yet.</div>';
+
+      bindModActions();
+    } catch (err) {
+      pendingEl.innerHTML = '<div class="comment-empty">Could not load comments.</div>';
+      approvedEl.innerHTML = '';
+    }
+  }
 
   // ---------- Now that every function/variable above is declared, do the
   // actual initial data loads and admin-state check, in order. ----------
