@@ -1463,6 +1463,10 @@
     fee_band_features: Array.from(document.querySelectorAll('#feeBandFeatures li')).map(li => li.textContent).join('\n'),
   };
 
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
   function renderFeatureList(ulId, text){
     const ul = document.getElementById(ulId);
     const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
@@ -2058,6 +2062,7 @@
     }
   });
 
+  window.loadComments = loadComments; // let the admin moderation code (separate script) refresh the carousel
   loadComments();
 })();
 </script>
