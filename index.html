@@ -615,6 +615,20 @@
     .about-photo{width:100%;justify-self:center;margin-left:auto;margin-right:auto;}
     .tabs{justify-content:center;}
     .video-card{width:100%;justify-self:center;margin-left:auto;margin-right:auto;}
+
+    /* --- Smaller Google Drive player controls ---
+       Drive draws its controls at a fixed pixel size, so on a phone they cover
+       much of the video. The player is rendered in a larger virtual window
+       (1 / 0.6 = 166.67%) and scaled down to fit: the video stays the same size
+       on screen, but the controls shrink to 60%. To make them bigger or smaller,
+       change 0.6 and 166.67% together (0.7 <-> 142.86%, 0.5 <-> 200%). */
+    .video-lightbox-frame{position:relative;overflow:hidden;}
+    .video-lightbox-frame iframe,
+    .video-thumb iframe{
+      position:absolute;top:0;left:0;
+      width:166.67%;height:166.67%;
+      transform:scale(0.6);transform-origin:0 0;
+    }
   }
 </style>
 </head>
