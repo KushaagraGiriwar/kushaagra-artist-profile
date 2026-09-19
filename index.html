@@ -1325,6 +1325,15 @@
     if (fn) { fn.call(document).catch(() => {}); }
   }
 
+  // On phones, CSS scales the Drive player down to shrink its controls. Browsers throw
+  // that scaling away when an iframe goes fullscreen (the big controls come back), and the
+  // lightbox is already fullscreen on open, so on phones Drive's own fullscreen is turned
+  // off. Same 700px breakpoint as the phone CSS. Desktop is unchanged.
+  function driveIframeHtml(src, query, desktopAllow){
+    const phone = window.matchMedia('(max-width:700px)').matches;
+    return '<iframe src="' + src + query + '" allow="' + (phone ? 'autoplay' : desktopAllow) + '"' + (phone ? '' : ' allowfullscreen') + '></iframe>';
+  }
+
   // Stops every currently-playing video on the page — every loaded inline
   // card preview, plus the lightbox player — so at most one can ever play
   // at once, no matter which one is opened next.
@@ -1345,7 +1354,7 @@
     stopAllVideos(thumb);
     const card = thumb.closest('.video-card');
     const src = card.dataset.src;
-    thumb.innerHTML = '<iframe src="' + src + '?autoplay=1" allow="autoplay" allowfullscreen></iframe>';
+    thumb.innerHTML = driveIframeHtml(src, '?autoplay=1', 'autoplay');
     thumb.dataset.loaded = 'true';
   }
 
@@ -1360,7 +1369,7 @@
   function updateVideoLightbox(){
     const card = currentPanelCards[currentVIdx];
     const src = card.dataset.src;
-    vlbFrame.innerHTML = '<iframe src="' + src + '" allow="autoplay; fullscreen" allowfullscreen></iframe>';
+    vlbFrame.innerHTML = driveIframeHtml(src, '', 'autoplay; fullscreen');
     vlbTitle.textContent = card.dataset.title;
     vlbVenue.textContent = card.dataset.venue;
     vlbCount.textContent = (currentVIdx + 1) + ' / ' + currentPanelCards.length;
