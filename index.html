@@ -1110,8 +1110,8 @@
     const container = document.getElementById('heroSlideshow');
     if (!photos || photos.length === 0) return;
     if (heroSlideTimer) clearInterval(heroSlideTimer);
-    // Use up to 8 photos so the hero doesn't loop through every single one.
-    const slides = photos.slice(0, 8);
+    // Use up to 10 photos so the hero doesn't loop through every single one.
+    const slides = photos.slice(0, 10);
     container.innerHTML = slides.map((p, i) =>
       `<img src="${p.url}" alt="${(p.alt || '').replace(/"/g,'&quot;')}" class="${i === 0 ? 'active' : ''}">`
     ).join('');
