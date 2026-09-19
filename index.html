@@ -620,10 +620,12 @@
     </div>
     <div>
       <p id="bioPara1">Kushaagra Giriwar is a Bollywood and semi-classical vocalist based in the Delhi NCR region, performing solo, duo and full-band sets across weddings, college fests and private events. Notable performances include Pianoman (TPM) and multiple college fest stages.</p>
-      <p id="bioPara2">[Full bio to be added — journey, influences, and what makes your live sets stand out.]</p>
+      <p id="bioPara2">Known for reading a room and shaping the setlist on the fly, Kushaagra blends chart-topping Bollywood hits with timeless classics to keep any crowd — from college fests to intimate celebrations — singing along till the very last song.</p>
+      <p id="bioPara3">Also known to survive three encores, zero sleep, and one too many "bhaiya ek gaana aur" requests from the front row.</p>
       <div id="adminEditBioBox" class="admin-add-photo" style="display:none;flex-direction:column;align-items:stretch;">
         <textarea id="adminBioPara1Input" placeholder="First bio paragraph" style="min-height:80px;resize:vertical;"></textarea>
         <textarea id="adminBioPara2Input" placeholder="Second bio paragraph" style="min-height:80px;resize:vertical;"></textarea>
+        <textarea id="adminBioPara3Input" placeholder="Funny one-liner" style="min-height:50px;resize:vertical;"></textarea>
         <button class="btn btn-primary" id="adminSaveBioBtn" style="width:auto;align-self:flex-start;">Save bio</button>
         <span id="adminSaveBioStatus"></span>
       </div>
@@ -714,7 +716,6 @@
 <section id="fees" class="ambient" style="--glow-x:90%;--glow-y:10%;--glow-x2:10%;--glow-y2:90%;">
   <div class="section-head">
     <h2 class="reveal">Booking &amp; fees</h2>
-    <span class="edit-hint">EDIT: set your real prices</span>
   </div>
   <div class="fee-grid">
     <div class="fee-card">
@@ -1436,6 +1437,7 @@
   const defaultContent = {
     bio_para1: document.getElementById('bioPara1').textContent,
     bio_para2: document.getElementById('bioPara2').textContent,
+    bio_para3: document.getElementById('bioPara3').textContent,
     fee_solo_price: document.getElementById('feeSoloPrice').textContent,
     fee_duo_price: document.getElementById('feeDuoPrice').textContent,
     fee_band_price: document.getElementById('feeBandPrice').textContent,
@@ -1445,6 +1447,7 @@
   function renderContent(){
     document.getElementById('bioPara1').textContent = siteContent.bio_para1 || defaultContent.bio_para1;
     document.getElementById('bioPara2').textContent = siteContent.bio_para2 || defaultContent.bio_para2;
+    document.getElementById('bioPara3').textContent = siteContent.bio_para3 || defaultContent.bio_para3;
     document.getElementById('feeSoloPrice').textContent = siteContent.fee_solo_price || defaultContent.fee_solo_price;
     document.getElementById('feeDuoPrice').textContent = siteContent.fee_duo_price || defaultContent.fee_duo_price;
     document.getElementById('feeBandPrice').textContent = siteContent.fee_band_price || defaultContent.fee_band_price;
@@ -1463,6 +1466,7 @@
     feesBox.style.display = 'flex';
     document.getElementById('adminBioPara1Input').value = siteContent.bio_para1 || defaultContent.bio_para1;
     document.getElementById('adminBioPara2Input').value = siteContent.bio_para2 || defaultContent.bio_para2;
+    document.getElementById('adminBioPara3Input').value = siteContent.bio_para3 || defaultContent.bio_para3;
     document.getElementById('adminFeeSoloInput').value = siteContent.fee_solo_price || defaultContent.fee_solo_price;
     document.getElementById('adminFeeDuoInput').value = siteContent.fee_duo_price || defaultContent.fee_duo_price;
     document.getElementById('adminFeeBandInput').value = siteContent.fee_band_price || defaultContent.fee_band_price;
@@ -1485,16 +1489,18 @@
     statusEl.textContent = 'Saving...';
     const bio_para1 = document.getElementById('adminBioPara1Input').value;
     const bio_para2 = document.getElementById('adminBioPara2Input').value;
+    const bio_para3 = document.getElementById('adminBioPara3Input').value;
     try {
       const res = await fetch(`${COMMENTS_API_BASE}/api/admin/content`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
-        body: JSON.stringify({ bio_para1, bio_para2 }),
+        body: JSON.stringify({ bio_para1, bio_para2, bio_para3 }),
       });
       const data = await res.json();
       if (!res.ok) { statusEl.textContent = data.error || 'Could not save.'; return; }
       siteContent.bio_para1 = bio_para1;
       siteContent.bio_para2 = bio_para2;
+      siteContent.bio_para3 = bio_para3;
       renderContent();
       statusEl.textContent = 'Saved!';
       setTimeout(() => { statusEl.textContent = ''; }, 2000);
