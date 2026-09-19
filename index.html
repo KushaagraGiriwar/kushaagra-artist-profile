@@ -721,8 +721,8 @@
     <div class="fee-card">
       <h3>Solo</h3>
       <div class="price"><span id="feeSoloPrice">₹XX,XXX</span> <small>/ event</small></div>
-      <p style="color:var(--ivory-dim);font-size:0.9rem;">Acoustic or backing-track set, ideal for intimate venues and smaller events.</p>
-      <ul>
+      <p id="feeSoloDesc" style="color:var(--ivory-dim);font-size:0.9rem;">Acoustic or backing-track set, ideal for intimate venues and smaller events.</p>
+      <ul id="feeSoloFeatures">
         <li>Up to 2 hours performance</li>
         <li>Own PA for small venues</li>
         <li>Custom setlist / requests</li>
@@ -732,8 +732,8 @@
       <span class="tag2">Most booked</span>
       <h3>Duo</h3>
       <div class="price"><span id="feeDuoPrice">₹XX,XXX</span> <small>/ event</small></div>
-      <p style="color:var(--ivory-dim);font-size:0.9rem;">Fuller sound with a second musician — most popular for weddings and private parties.</p>
-      <ul>
+      <p id="feeDuoDesc" style="color:var(--ivory-dim);font-size:0.9rem;">Fuller sound with a second musician — most popular for weddings and private parties.</p>
+      <ul id="feeDuoFeatures">
         <li>Up to 2.5 hours performance</li>
         <li>Sound setup included</li>
         <li>Custom setlist / requests</li>
@@ -742,8 +742,8 @@
     <div class="fee-card">
       <h3>Band</h3>
       <div class="price"><span id="feeBandPrice">₹XX,XXX</span> <small>/ event</small></div>
-      <p style="color:var(--ivory-dim);font-size:0.9rem;">Full live band experience for festivals, large weddings and corporate stages.</p>
-      <ul>
+      <p id="feeBandDesc" style="color:var(--ivory-dim);font-size:0.9rem;">Full live band experience for festivals, large weddings and corporate stages.</p>
+      <ul id="feeBandFeatures">
         <li>Full band (list size, e.g. 4–5 members)</li>
         <li>Sound engineer available on request</li>
         <li>Custom setlist / requests</li>
@@ -758,7 +758,20 @@
       <input type="text" id="adminFeeDuoInput" placeholder="Duo price, e.g. ₹25,000">
       <input type="text" id="adminFeeBandInput" placeholder="Band price, e.g. ₹50,000">
     </div>
-    <textarea id="adminFeeNoteInput" placeholder="Fee note / disclaimer" style="min-height:60px;resize:vertical;"></textarea>
+
+    <strong style="color:var(--brass);font-size:0.85rem;margin-top:10px;">Solo — description &amp; included</strong>
+    <textarea id="adminFeeSoloDescInput" placeholder="Solo description" style="min-height:50px;resize:vertical;"></textarea>
+    <textarea id="adminFeeSoloFeaturesInput" placeholder="One item per line, e.g.&#10;Up to 2 hours performance&#10;Own PA for small venues" style="min-height:80px;resize:vertical;"></textarea>
+
+    <strong style="color:var(--brass);font-size:0.85rem;margin-top:10px;">Duo — description &amp; included</strong>
+    <textarea id="adminFeeDuoDescInput" placeholder="Duo description" style="min-height:50px;resize:vertical;"></textarea>
+    <textarea id="adminFeeDuoFeaturesInput" placeholder="One item per line" style="min-height:80px;resize:vertical;"></textarea>
+
+    <strong style="color:var(--brass);font-size:0.85rem;margin-top:10px;">Band — description &amp; included</strong>
+    <textarea id="adminFeeBandDescInput" placeholder="Band description" style="min-height:50px;resize:vertical;"></textarea>
+    <textarea id="adminFeeBandFeaturesInput" placeholder="One item per line" style="min-height:80px;resize:vertical;"></textarea>
+
+    <textarea id="adminFeeNoteInput" placeholder="Fee note / disclaimer" style="min-height:60px;resize:vertical;margin-top:10px;"></textarea>
     <button class="btn btn-primary" id="adminSaveFeesBtn" style="width:auto;align-self:flex-start;">Save fees</button>
     <span id="adminSaveFeesStatus"></span>
   </div>
@@ -1442,7 +1455,19 @@
     fee_duo_price: document.getElementById('feeDuoPrice').textContent,
     fee_band_price: document.getElementById('feeBandPrice').textContent,
     fee_note: document.getElementById('feeNote').textContent,
+    fee_solo_desc: document.getElementById('feeSoloDesc').textContent,
+    fee_duo_desc: document.getElementById('feeDuoDesc').textContent,
+    fee_band_desc: document.getElementById('feeBandDesc').textContent,
+    fee_solo_features: Array.from(document.querySelectorAll('#feeSoloFeatures li')).map(li => li.textContent).join('\n'),
+    fee_duo_features: Array.from(document.querySelectorAll('#feeDuoFeatures li')).map(li => li.textContent).join('\n'),
+    fee_band_features: Array.from(document.querySelectorAll('#feeBandFeatures li')).map(li => li.textContent).join('\n'),
   };
+
+  function renderFeatureList(ulId, text){
+    const ul = document.getElementById(ulId);
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+    ul.innerHTML = lines.map(line => `<li>${escapeHtml(line)}</li>`).join('');
+  }
 
   function renderContent(){
     document.getElementById('bioPara1').textContent = siteContent.bio_para1 || defaultContent.bio_para1;
@@ -1452,6 +1477,12 @@
     document.getElementById('feeDuoPrice').textContent = siteContent.fee_duo_price || defaultContent.fee_duo_price;
     document.getElementById('feeBandPrice').textContent = siteContent.fee_band_price || defaultContent.fee_band_price;
     document.getElementById('feeNote').textContent = siteContent.fee_note || defaultContent.fee_note;
+    document.getElementById('feeSoloDesc').textContent = siteContent.fee_solo_desc || defaultContent.fee_solo_desc;
+    document.getElementById('feeDuoDesc').textContent = siteContent.fee_duo_desc || defaultContent.fee_duo_desc;
+    document.getElementById('feeBandDesc').textContent = siteContent.fee_band_desc || defaultContent.fee_band_desc;
+    renderFeatureList('feeSoloFeatures', siteContent.fee_solo_features || defaultContent.fee_solo_features);
+    renderFeatureList('feeDuoFeatures', siteContent.fee_duo_features || defaultContent.fee_duo_features);
+    renderFeatureList('feeBandFeatures', siteContent.fee_band_features || defaultContent.fee_band_features);
   }
 
   function renderContentEditors(){
@@ -1471,6 +1502,12 @@
     document.getElementById('adminFeeDuoInput').value = siteContent.fee_duo_price || defaultContent.fee_duo_price;
     document.getElementById('adminFeeBandInput').value = siteContent.fee_band_price || defaultContent.fee_band_price;
     document.getElementById('adminFeeNoteInput').value = siteContent.fee_note || defaultContent.fee_note;
+    document.getElementById('adminFeeSoloDescInput').value = siteContent.fee_solo_desc || defaultContent.fee_solo_desc;
+    document.getElementById('adminFeeDuoDescInput').value = siteContent.fee_duo_desc || defaultContent.fee_duo_desc;
+    document.getElementById('adminFeeBandDescInput').value = siteContent.fee_band_desc || defaultContent.fee_band_desc;
+    document.getElementById('adminFeeSoloFeaturesInput').value = siteContent.fee_solo_features || defaultContent.fee_solo_features;
+    document.getElementById('adminFeeDuoFeaturesInput').value = siteContent.fee_duo_features || defaultContent.fee_duo_features;
+    document.getElementById('adminFeeBandFeaturesInput').value = siteContent.fee_band_features || defaultContent.fee_band_features;
   }
 
   async function loadContent(){
@@ -1516,15 +1553,29 @@
     const fee_duo_price = document.getElementById('adminFeeDuoInput').value;
     const fee_band_price = document.getElementById('adminFeeBandInput').value;
     const fee_note = document.getElementById('adminFeeNoteInput').value;
+    const fee_solo_desc = document.getElementById('adminFeeSoloDescInput').value;
+    const fee_duo_desc = document.getElementById('adminFeeDuoDescInput').value;
+    const fee_band_desc = document.getElementById('adminFeeBandDescInput').value;
+    const fee_solo_features = document.getElementById('adminFeeSoloFeaturesInput').value;
+    const fee_duo_features = document.getElementById('adminFeeDuoFeaturesInput').value;
+    const fee_band_features = document.getElementById('adminFeeBandFeaturesInput').value;
     try {
       const res = await fetch(`${COMMENTS_API_BASE}/api/admin/content`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
-        body: JSON.stringify({ fee_solo_price, fee_duo_price, fee_band_price, fee_note }),
+        body: JSON.stringify({
+          fee_solo_price, fee_duo_price, fee_band_price, fee_note,
+          fee_solo_desc, fee_duo_desc, fee_band_desc,
+          fee_solo_features, fee_duo_features, fee_band_features,
+        }),
       });
       const data = await res.json();
       if (!res.ok) { statusEl.textContent = data.error || 'Could not save.'; return; }
-      Object.assign(siteContent, { fee_solo_price, fee_duo_price, fee_band_price, fee_note });
+      Object.assign(siteContent, {
+        fee_solo_price, fee_duo_price, fee_band_price, fee_note,
+        fee_solo_desc, fee_duo_desc, fee_band_desc,
+        fee_solo_features, fee_duo_features, fee_band_features,
+      });
       renderContent();
       statusEl.textContent = 'Saved!';
       setTimeout(() => { statusEl.textContent = ''; }, 2000);
