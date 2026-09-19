@@ -574,6 +574,40 @@
     .gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:140px;}
     .gallery .g-item:nth-child(1){grid-column:span 2;}
   }
+
+  /* =====================================================================
+     PHONE-ONLY TWEAKS (max-width:700px). Everything here is inside this
+     one media query, so laptop/desktop layout is completely unaffected.
+     ===================================================================== */
+  @media(max-width:700px){
+
+    /* --- Headings centered on phones --- */
+    .section-head{
+      flex-direction:column;align-items:center;justify-content:center;
+      text-align:center;gap:10px;
+    }
+    .section-head h2{text-align:center;}
+    .contact-wrap h2{text-align:center;}
+    .hero-inner{width:100%;text-align:center;}
+    .hero p.tag{margin-left:auto;margin-right:auto;}
+    .hero-actions{justify-content:center;}
+
+    /* --- Video player: bigger, fits the screen, arrows moved below the video --- */
+    .video-lightbox{padding:56px 12px 92px;}
+    .video-lightbox-inner{width:100%;max-width:none;}
+    .video-lightbox-frame{
+      width:min(100%, calc((100vh - 190px) * 9 / 16));
+      width:min(100%, calc((100dvh - 190px) * 9 / 16));
+      height:auto;max-height:none;
+      aspect-ratio:9/16;
+      margin:0 auto;
+    }
+    .video-lightbox .lightbox-arrow{
+      top:auto;bottom:22px;transform:none;width:46px;height:46px;
+    }
+    .video-lightbox .lightbox-prev{left:calc(50% - 60px);}
+    .video-lightbox .lightbox-next{left:auto;right:calc(50% - 60px);}
+  }
 </style>
 </head>
 <body>
@@ -647,7 +681,6 @@
 <section id="videos">
   <div class="section-head">
     <h2 class="reveal">Performances</h2>
-    <span class="edit-hint">Live from your Drive folder</span>
   </div>
 
   <div class="tabs">
@@ -673,7 +706,6 @@
 <section id="gallery">
   <div class="section-head">
     <h2 class="reveal">Photos</h2>
-    <span class="edit-hint">Live from your Drive folder</span>
   </div>
 
   <div id="adminAddPhotoBox" class="admin-add-photo" style="display:none;">
