@@ -907,6 +907,89 @@
       transform:scale(0.6);transform-origin:0 0;
     }
   }
+  /* ================================================================
+     EXPERIMENTAL EFFECTS — added for extra visual flair.
+     Fully self-contained: nothing else on the site depends on this
+     block. To completely revert, delete everything between here and
+     the "END EXPERIMENTAL EFFECTS" marker below, plus the two small
+     HTML snippets in <body> marked the same way (equalizer + floating
+     notes in the hero). No JS, no other CSS touched.
+     ================================================================ */
+
+  /* Slow-drifting glow on the ambient sections (About/Fees/etc.) —
+     same gradients as before, just given gentle motion instead of
+     sitting static. */
+  section.ambient::before{
+    animation: fxAmbientDrift 22s ease-in-out infinite alternate;
+    background-size:160% 160%;
+  }
+  @keyframes fxAmbientDrift{
+    0%{background-position:0% 0%;}
+    100%{background-position:100% 100%;}
+  }
+
+  /* Same slow drift applied to the hero's own overlay glow. */
+  .hero-overlay{
+    background-size:160% 160%;
+    animation: fxAmbientDrift 26s ease-in-out infinite alternate;
+  }
+
+  /* Small brass underline that draws in under every section heading
+     shortly after it scrolls into view — pure CSS, no HTML changes
+     needed since it targets the existing .reveal headings directly. */
+  h2.reveal{position:relative;display:inline-block;}
+  h2.reveal::after{
+    content:"";position:absolute;left:0;bottom:-10px;height:2px;width:0;
+    background:var(--brass);
+    transition:width 1s cubic-bezier(.22,1,.36,1) .25s;
+  }
+  h2.reveal.in-view::after{width:56px;}
+
+  /* Tiny music equalizer accent, sits next to the hero kicker text. */
+  .fx-eq{
+    display:inline-flex;align-items:flex-end;gap:3px;height:14px;
+    margin-left:10px;vertical-align:middle;
+  }
+  .fx-eq span{
+    width:3px;background:var(--brass);display:inline-block;
+    animation:fxEqBounce 1s ease-in-out infinite;
+    transform-origin:bottom;
+  }
+  .fx-eq span:nth-child(1){height:40%;animation-delay:0s;}
+  .fx-eq span:nth-child(2){height:100%;animation-delay:.15s;}
+  .fx-eq span:nth-child(3){height:60%;animation-delay:.3s;}
+  .fx-eq span:nth-child(4){height:85%;animation-delay:.45s;}
+  @keyframes fxEqBounce{
+    0%,100%{transform:scaleY(0.35);}
+    50%{transform:scaleY(1);}
+  }
+
+  /* Faint music notes drifting up through the hero — decorative only,
+     aria-hidden, sits behind the hero text (never overlaps buttons). */
+  .fx-notes{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+  .fx-notes span{
+    position:absolute;bottom:-40px;color:var(--brass);opacity:0;
+    animation:fxNoteFloat 16s linear infinite;
+  }
+  .fx-notes span:nth-child(1){left:12%;font-size:1.3rem;animation-delay:0s;}
+  .fx-notes span:nth-child(2){left:52%;font-size:2rem;animation-delay:5.5s;}
+  .fx-notes span:nth-child(3){left:82%;font-size:1.1rem;animation-delay:10s;}
+  @keyframes fxNoteFloat{
+    0%{transform:translateY(0) rotate(0deg);opacity:0;}
+    8%{opacity:0.16;}
+    92%{opacity:0.16;}
+    100%{transform:translateY(-640px) rotate(18deg);opacity:0;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    section.ambient::before, .hero-overlay, .fx-eq span, .fx-notes span{
+      animation:none !important;
+    }
+  }
+
+  /* ================================================================
+     END EXPERIMENTAL EFFECTS
+     ================================================================ */
+
 </style>
 </head>
 <body>
@@ -928,8 +1011,15 @@
 <header class="hero">
   <div class="hero-slideshow" id="heroSlideshow"></div>
   <div class="hero-overlay"></div>
+  <!-- EXPERIMENTAL: floating music notes (decorative, purely visual — see EXPERIMENTAL EFFECTS block in <style> to remove) -->
+  <div class="fx-notes" aria-hidden="true"><span>&#9834;</span><span>&#9835;</span><span>&#9834;</span></div>
+  <!-- END EXPERIMENTAL -->
   <div class="hero-inner">
-    <div class="hero-kicker">Bollywood &amp; Semi-Classical Live Singer · Delhi NCR</div>
+    <div class="hero-kicker">Bollywood &amp; Semi-Classical Live Singer · Delhi NCR
+      <!-- EXPERIMENTAL: equalizer accent — see EXPERIMENTAL EFFECTS block in <style> to remove -->
+      <span class="fx-eq" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+      <!-- END EXPERIMENTAL -->
+    </div>
     <h1>Kushaagra <br>Giriwar</h1>
     <p class="tag">Solo sets, intimate duo shows, or a full live band — Bollywood and semi-classical music built for weddings, college fests, corporate events and private nights that need to be remembered.</p>
     <div class="live-badge" id="liveBadge" style="display:none;">
