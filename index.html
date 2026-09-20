@@ -463,8 +463,13 @@
   section.ambient > *{position:relative;z-index:1;}
 
   /* ---------- Scroll reveal ---------- */
-  .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease, transform .8s ease;}
-  .reveal.in-view{opacity:1;transform:translateY(0);}
+  .reveal{
+    opacity:0;
+    transform:translateY(26px) rotate(-2.5deg) scale(0.97);
+    transform-origin:left bottom;
+    transition:opacity 1s cubic-bezier(.22,1,.36,1), transform 1s cubic-bezier(.22,1,.36,1);
+  }
+  .reveal.in-view{opacity:1;transform:translateY(0) rotate(0deg) scale(1);}
   .about-grid p{font-size:1.08rem;color:var(--ivory-dim);margin-bottom:20px;max-width:560px;}
   .facts{border-top:1px solid var(--line);}
   .fact{
