@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+  // Redirect the old GitHub Pages URL to the custom domain. GitHub Pages
+  // serves identical content at both addresses without a real server-side
+  // redirect, which was causing Google to treat them as duplicates and
+  // keep indexing the old URL instead of kushaagragiriwar.com. This runs
+  // before anything else loads, so real visitors barely notice, and search
+  // engines see a clear signal to consolidate on the new domain.
+  if (window.location.hostname === 'kushaagragiriwar.github.io') {
+    var newPath = window.location.pathname.replace(/^\/kushaagra-artist-profile\/?/, '/');
+    window.location.replace('https://kushaagragiriwar.com' + newPath + window.location.search + window.location.hash);
+  }
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kushaagra Giriwar | Live Singer in Delhi NCR – Bollywood Vocalist</title>
